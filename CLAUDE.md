@@ -23,14 +23,16 @@ Cada cartório (empresa cliente) possui seus próprios dados isolados por `empre
 ## 2. Estrutura de Repositórios
 
 ```
-/home/alexandre/code/OSLO/
-├── backend/    → git remote: github.com:mendesalexandre/OSLO-api.git
-├── frontend/   → git remote: github.com:mendesalexandre/OSLO-app.git
+/home/alexandre/code/OSLO/          → git remote: github.com:mendesalexandre/OSLO.git
+├── backend/                         → código Laravel (API)
+├── frontend/                        → código Vue/Quasar (app)
+├── docs/                            → documentação do projeto
 ├── CLAUDE.md
 └── MULTI_TENANCY.md
 ```
 
-Commits e push devem ser feitos **separadamente** para cada repo.
+**Monorepo único** — todos os commits e push vão para `github.com:mendesalexandre/OSLO.git`.
+Os repositórios antigos `OSLO-api` e `OSLO-app` no GitHub estão preservados mas não são mais usados.
 
 ---
 
