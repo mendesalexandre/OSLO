@@ -23,18 +23,6 @@ const routes = [
         meta: { title: 'Indicador Pessoal' },
       },
       {
-        path: 'novo',
-        name: 'indicador-pessoal.novo',
-        component: () => import('pages/indicador-pessoal/FormPage.vue'),
-        meta: { title: 'Novo Indicador Pessoal' },
-      },
-      {
-        path: ':id/editar',
-        name: 'indicador-pessoal.editar',
-        component: () => import('pages/indicador-pessoal/FormPage.vue'),
-        meta: { title: 'Editar Indicador Pessoal' },
-      },
-      {
         path: ':cpfCnpj/versoes',
         name: 'indicador-pessoal.versoes',
         component: () => import('pages/indicador-pessoal/VersoesPage.vue'),

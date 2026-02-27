@@ -7,7 +7,7 @@
         icon="add"
         label="Novo"
         unelevated
-        :to="{ name: 'indicador-pessoal.novo' }"
+        @click="abrirNovo"
       />
     </div>
 
@@ -86,7 +86,7 @@
               dense
               icon="edit"
               color="primary"
-              :to="{ name: 'indicador-pessoal.editar', params: { id: props.row.id } }"
+              @click="abrirEditar(props.row)"
             >
               <q-tooltip>Editar</q-tooltip>
             </q-btn>
@@ -114,19 +114,29 @@
         </template>
       </q-table>
     </q-card>
+
+    <!-- Modal cadastro/edição -->
+    <ModalIndicadorPessoal
+      v-model="modalAberto"
+      :id="idSelecionado"
+      @salvo="buscar"
+    />
   </q-page>
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useIndicadorPessoalStore } from 'src/stores/indicador-pessoal'
 import BadgeIndisponibilidade from 'src/components/indicador-pessoal/BadgeIndisponibilidade.vue'
+import ModalIndicadorPessoal from 'src/components/indicador-pessoal/ModalIndicadorPessoal.vue'
 
 const $q = useQuasar()
 const indicadorPessoalStore = useIndicadorPessoalStore()
 
 const filtros = reactive({ busca: '', tipo_pessoa: null })
+const modalAberto = ref(false)
+const idSelecionado = ref(null)
 
 const tiposPessoa = [
   { label: 'Pessoa Física', value: 'F' },
@@ -150,6 +160,16 @@ const colunas = [
 ]
 
 onMounted(() => buscar())
+
+function abrirNovo() {
+  idSelecionado.value = null
+  modalAberto.value = true
+}
+
+function abrirEditar(registro) {
+  idSelecionado.value = registro.id
+  modalAberto.value = true
+}
 
 function buscar() {
   const params = {}
