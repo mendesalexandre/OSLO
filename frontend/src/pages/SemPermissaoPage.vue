@@ -7,15 +7,7 @@
         Você não possui permissão para acessar esta página.
         Entre em contato com o administrador caso precise de acesso.
       </p>
-      <q-btn
-        flat
-        no-caps
-        color="primary"
-        label="Voltar"
-        icon="arrow_back"
-        @click="$router.back()"
-        class="q-mt-md"
-      />
+      <q-btn flat no-caps color="primary" label="Voltar" icon="arrow_back" @click="$router.back()" class="q-mt-md" />
     </div>
   </q-page>
 </template>

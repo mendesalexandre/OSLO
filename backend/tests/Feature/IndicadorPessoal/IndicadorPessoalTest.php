@@ -147,8 +147,8 @@ test('motivo_versao é obrigatório na atualização', function () {
 
 // ── Listagem ──────────────────────────────────────────────────────────────
 
-test('listagem retorna apenas versões atuais', function () {
-    // Cria versão 1 e logo depois cria versão 2 (desativa v1)
+test('listagem retorna todas as versões ordenadas por versão', function () {
+    // Cria versão 1 e logo depois cria versão 2
     $indicador = indicadorPF();
     $this->actingAs(usuario(), 'web')
         ->putJson("/api/v1/indicador-pessoal/{$indicador->id}", [
@@ -163,7 +163,8 @@ test('listagem retorna apenas versões atuais', function () {
 
     $response->assertStatus(200);
     $nomes = collect($response->json('dados.data'))->pluck('nome');
-    expect($nomes)->not->toContain('João da Silva');
+    // Ambas as versões devem aparecer na listagem
+    expect($nomes)->toContain('João da Silva');
     expect($nomes)->toContain('João v2');
 });
 

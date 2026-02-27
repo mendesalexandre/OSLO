@@ -63,18 +63,6 @@
               color="primary"
               @click="editarAtual(versao.id)"
             />
-
-            <!-- Duplicar: qualquer versão -->
-            <q-btn
-              flat
-              dense
-              size="sm"
-              icon="content_copy"
-              label="Criar nova versão a partir desta"
-              color="orange-8"
-              :loading="duplicando === versao.id"
-              @click="confirmarDuplicar(versao)"
-            />
           </q-card-actions>
         </q-card>
       </q-timeline-entry>
@@ -111,7 +99,6 @@ const store = useIndicadorPessoalStore()
 
 const versoes = ref([])
 const carregando = ref(false)
-const duplicando = ref(null)
 const modalEdicaoAberto = ref(false)
 const idEdicao = ref(null)
 
@@ -130,34 +117,6 @@ async function carregar() {
 function editarAtual(id) {
   idEdicao.value = id
   modalEdicaoAberto.value = true
-}
-
-function confirmarDuplicar(versao) {
-  $q.dialog({
-    title: `Criar nova versão a partir da Versão ${versao.versao}`,
-    message: 'Informe o motivo para criar esta nova versão:',
-    prompt: {
-      model: '',
-      type: 'textarea',
-      label: 'Motivo',
-      isValid: (val) => val?.trim().length >= 3,
-    },
-    cancel: { label: 'Cancelar', flat: true },
-    ok: { label: 'Criar versão', color: 'primary', unelevated: true },
-    persistent: true,
-  }).onOk(async (motivo) => {
-    duplicando.value = versao.id
-    try {
-      await store.duplicar(versao.id, motivo)
-      $q.notify({ type: 'positive', message: `Nova versão criada a partir da Versão ${versao.versao}.` })
-      await carregar()
-      emit('atualizado')
-    } catch (e) {
-      $q.notify({ type: 'negative', message: e?.response?.data?.mensagem || 'Erro ao duplicar versão.' })
-    } finally {
-      duplicando.value = null
-    }
-  })
 }
 
 function aoSalvar() {

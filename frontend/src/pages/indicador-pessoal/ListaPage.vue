@@ -57,6 +57,17 @@
         flat
         @request="onRequest"
       >
+        <template #body-cell-versao="props">
+          <q-td :props="props" class="text-center">
+            <q-badge
+              :color="props.row.is_atual ? 'positive' : 'grey-5'"
+              :label="`v${props.row.versao}`"
+            >
+              <q-icon v-if="props.row.is_atual" name="star" size="10px" class="q-ml-xs" />
+            </q-badge>
+          </q-td>
+        </template>
+
         <template #body-cell-tipo_pessoa="props">
           <q-td :props="props">
             <q-badge
@@ -80,7 +91,21 @@
 
         <template #body-cell-acoes="props">
           <q-td :props="props" class="text-right">
+            <!-- Visualizar (sempre) -->
             <q-btn
+              flat
+              round
+              dense
+              icon="visibility"
+              color="grey-7"
+              @click="abrirVisualizar(props.row)"
+            >
+              <q-tooltip>Visualizar</q-tooltip>
+            </q-btn>
+
+            <!-- Editar (somente versão atual) -->
+            <q-btn
+              v-if="props.row.is_atual"
               flat
               round
               dense
@@ -90,16 +115,20 @@
             >
               <q-tooltip>Editar</q-tooltip>
             </q-btn>
+
+            <!-- Duplicar (qualquer versão) -->
             <q-btn
               flat
               round
               dense
-              icon="history"
-              color="grey-7"
-              @click="abrirVersoes(props.row)"
+              icon="content_copy"
+              color="orange-8"
+              @click="confirmarDuplicar(props.row)"
             >
-              <q-tooltip>Histórico de versões</q-tooltip>
+              <q-tooltip>Criar nova versão a partir desta</q-tooltip>
             </q-btn>
+
+            <!-- Excluir -->
             <q-btn
               flat
               round
@@ -122,11 +151,11 @@
       @salvo="buscar"
     />
 
-    <!-- Modal histórico de versões -->
-    <ModalVersoesIndicadorPessoal
-      v-model="modalVersoesAberto"
-      :cpf-cnpj="cpfCnpjSelecionado"
-      @atualizado="buscar"
+    <!-- Modal visualização (somente leitura) -->
+    <ModalIndicadorPessoal
+      v-model="modalVisualizarAberto"
+      :id="idVisualizar"
+      :readonly="true"
     />
   </q-page>
 </template>
@@ -137,7 +166,6 @@ import { useQuasar } from 'quasar'
 import { useIndicadorPessoalStore } from 'src/stores/indicador-pessoal'
 import BadgeIndisponibilidade from 'src/components/indicador-pessoal/BadgeIndisponibilidade.vue'
 import ModalIndicadorPessoal from 'src/components/indicador-pessoal/ModalIndicadorPessoal.vue'
-import ModalVersoesIndicadorPessoal from 'src/components/indicador-pessoal/ModalVersoesIndicadorPessoal.vue'
 
 const $q = useQuasar()
 const indicadorPessoalStore = useIndicadorPessoalStore()
@@ -145,8 +173,8 @@ const indicadorPessoalStore = useIndicadorPessoalStore()
 const filtros = reactive({ busca: '', tipo_pessoa: null })
 const modalAberto = ref(false)
 const idSelecionado = ref(null)
-const modalVersoesAberto = ref(false)
-const cpfCnpjSelecionado = ref(null)
+const modalVisualizarAberto = ref(false)
+const idVisualizar = ref(null)
 
 const tiposPessoa = [
   { label: 'Pessoa Física', value: 'F' },
@@ -154,7 +182,7 @@ const tiposPessoa = [
 ]
 
 const colunas = [
-  { name: 'ficha', label: 'Ficha', field: 'ficha', align: 'left', sortable: true },
+  { name: 'versao', label: 'Versão', field: 'versao', align: 'center', sortable: true },
   { name: 'nome', label: 'Nome', field: 'nome', align: 'left', sortable: true },
   { name: 'cpf_cnpj', label: 'CPF/CNPJ', field: 'cpf_cnpj', align: 'left' },
   { name: 'tipo_pessoa', label: 'Tipo', field: 'tipo_pessoa', align: 'center' },
@@ -181,9 +209,9 @@ function abrirEditar(registro) {
   modalAberto.value = true
 }
 
-function abrirVersoes(registro) {
-  cpfCnpjSelecionado.value = registro.cpf_cnpj
-  modalVersoesAberto.value = true
+function abrirVisualizar(registro) {
+  idVisualizar.value = registro.id
+  modalVisualizarAberto.value = true
 }
 
 function buscar() {
@@ -205,6 +233,30 @@ function formatarDoc(doc) {
   const d = doc.replace(/\D/g, '')
   if (d.length === 11) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
   return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')
+}
+
+function confirmarDuplicar(registro) {
+  $q.dialog({
+    title: `Criar nova versão a partir da Versão ${registro.versao}`,
+    message: 'Informe o motivo para criar esta nova versão:',
+    prompt: {
+      model: '',
+      type: 'textarea',
+      label: 'Motivo',
+      isValid: (val) => val?.trim().length >= 3,
+    },
+    cancel: { label: 'Cancelar', flat: true },
+    ok: { label: 'Criar versão', color: 'primary', unelevated: true },
+    persistent: true,
+  }).onOk(async (motivo) => {
+    try {
+      await indicadorPessoalStore.duplicar(registro.id, motivo)
+      $q.notify({ type: 'positive', message: `Nova versão criada a partir da Versão ${registro.versao}.` })
+      buscar()
+    } catch (e) {
+      $q.notify({ type: 'negative', message: e?.response?.data?.mensagem || 'Erro ao duplicar versão.' })
+    }
+  })
 }
 
 function confirmarExclusao(registro) {

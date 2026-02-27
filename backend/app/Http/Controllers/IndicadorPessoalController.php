@@ -19,8 +19,7 @@ class IndicadorPessoalController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $query = IndicadorPessoal::atual()->ativo()
-            ->with(['estadoCivil', 'profissao', 'nacionalidade'])
+        $query = IndicadorPessoal::with(['estadoCivil', 'profissao', 'nacionalidade'])
             ->withCount([
                 'indisponibilidades as indisponibilidades_count' => function ($q) {
                     $q->whereNotIn('status', ['cancelada'])
@@ -39,7 +38,7 @@ class IndicadorPessoalController extends Controller
             $query->where('tipo_pessoa', $tipo);
         }
 
-        return $this->sucesso($query->orderBy('nome')->paginate(15));
+        return $this->sucesso($query->orderBy('nome')->orderByDesc('versao')->paginate(15));
     }
 
     public function show(int $id): JsonResponse

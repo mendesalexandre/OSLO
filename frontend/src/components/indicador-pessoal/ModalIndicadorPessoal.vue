@@ -1,9 +1,11 @@
 <template>
   <modal
-    :titulo="id ? 'Editar Indicador Pessoal' : 'Cadastrar Indicador Pessoal'"
+    :titulo="readonly ? 'Visualizar Indicador Pessoal' : (id ? 'Editar Indicador Pessoal' : 'Cadastrar Indicador Pessoal')"
     v-model="model"
     tamanho="lg"
   >
+    <div :class="{ 'form-readonly': readonly }">
+
     <!-- Tipo de pessoa -->
     <q-card flat bordered class="q-mb-sm">
       <q-card-section>
@@ -374,8 +376,10 @@
       class="q-mb-sm"
     />
 
-    <!-- Motivo versão (somente edição) -->
-    <q-card v-if="id" flat bordered class="q-mb-sm bg-amber-1">
+    </div><!-- /form-readonly -->
+
+    <!-- Motivo versão (somente edição, nunca readonly) -->
+    <q-card v-if="id && !readonly" flat bordered class="q-mb-sm bg-amber-1">
       <q-card-section>
         <div class="titulo">Motivo da Alteração</div>
       </q-card-section>
@@ -393,7 +397,7 @@
       </q-card-section>
     </q-card>
 
-    <template v-slot:rodape>
+    <template v-if="!readonly" v-slot:rodape>
       <q-card-section class="flex justify-end">
         <div class="q-gutter-sm">
           <q-btn label="Cancelar" color="secondary" outline icon="close" @click="cancelar" />
@@ -423,6 +427,10 @@ const props = defineProps({
   id: {
     type: Number,
     default: null,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -574,3 +582,10 @@ function cancelar() {
   model.value = false
 }
 </script>
+
+<style scoped>
+.form-readonly {
+  pointer-events: none;
+  opacity: 0.75;
+}
+</style>
