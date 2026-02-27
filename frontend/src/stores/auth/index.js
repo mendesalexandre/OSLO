@@ -9,13 +9,6 @@ export const useAuthStore = defineStore('auth', () => {
   const autenticado = computed(() => usuario.value !== null)
 
   async function login(email, senha) {
-    // Inicia a sessão e obtém o token CSRF no corpo da resposta.
-    // Necessário para cross-origin (localhost:9000 → localhost:8000): document.cookie
-    // não consegue ler cookies de portas diferentes no Chrome, então usamos
-    // X-CSRF-TOKEN (plaintext) em vez de X-XSRF-TOKEN (baseado em cookie).
-    const { data: csrf } = await api.get('/v1/csrf-token')
-    api.defaults.headers.common['X-CSRF-TOKEN'] = csrf.token
-
     const response = await api.post(`${path}/login`, { email, senha })
     usuario.value = response.data.dados
   }
