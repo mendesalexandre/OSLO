@@ -13,7 +13,7 @@ Cada cartório (empresa cliente) possui seus próprios dados isolados por `empre
 |------------|--------------------------------------------------------|
 | Backend    | Laravel 12 · PHP 8.4+ · PostgreSQL · Redis             |
 | Frontend   | Vue 3.4 · Quasar 2.18 · Pinia 3 · Axios               |
-| Auth       | tymon/jwt-auth (guard `api`, driver `jwt`)             |
+| Auth       | Laravel Sanctum (guard `web`, HttpOnly cookies, stateful) |
 | PDF        | mPDF 8 + wkhtmltopdf (Snappy)                          |
 | Fila       | Redis (queues + sessions + cache)                      |
 | Assinatura | Lacuna/RestPKI                                         |
@@ -369,6 +369,7 @@ Middleware `VerificarTrial` bloqueia POST/PUT/PATCH/DELETE quando `read_only`.
 - Especificar `->withTimestamps('created_at', 'updated_at')` em BelongsToMany se o model pai tem timestamps customizados
 - **Sempre usar a store Pinia para chamadas de API** — nunca chamar `api` diretamente em pages ou components
 - **Separar dialogs/modais em componentes próprios** (ex: `ModalTabelaCustaAto.vue`) e usar `<modal v-model>` global
+- **Consultas/buscas (telas de consulta unificada, busca avançada, etc.) sempre devem ser modais** usando `<modal v-model="aberto">` — nunca criar página standalone para consulta
 - **Controllers com UUID**: nunca usar route model binding (`TabelaCustaAto $ato`) para rotas que recebem UUID — usar `string $uuid` + lookup manual `where('uuid', $uuid)->first()`
 
 ### Nunca fazer
@@ -379,6 +380,7 @@ Middleware `VerificarTrial` bloqueia POST/PUT/PATCH/DELETE quando `read_only`.
 - Fazer push para `main` sem criar tag de versão quando houver feature completa
 - Chamar `api.get/post/put/delete` diretamente em `.vue` — **sempre via store**
 - Usar `q-dialog` inline em pages — **sempre criar componente separado** com `<modal>`
+- Criar página separada para consultas — **sempre usar modal** (`<modal v-model>`)
 
 ### Padrão de tags Git
 ```
