@@ -32,6 +32,7 @@ Route::prefix('v1')->group(function () {
         // Indicador Pessoal — rotas específicas antes do resource para evitar conflito com {id}
         Route::get('indicador-pessoal/busca', [IndicadorPessoalController::class, 'busca'])->name('indicador-pessoal.busca');
         Route::get('indicador-pessoal/{cpfCnpj}/versoes', [IndicadorPessoalController::class, 'versoes'])->name('indicador-pessoal.versoes');
+        Route::post('indicador-pessoal/{id}/duplicar', [IndicadorPessoalController::class, 'duplicar'])->name('indicador-pessoal.duplicar');
         Route::apiResource('indicador-pessoal', IndicadorPessoalController::class)->only([
             'index', 'store', 'show', 'update', 'destroy',
         ]);

@@ -22,12 +22,6 @@ const routes = [
         component: () => import('pages/indicador-pessoal/ListaPage.vue'),
         meta: { title: 'Indicador Pessoal' },
       },
-      {
-        path: ':cpfCnpj/versoes',
-        name: 'indicador-pessoal.versoes',
-        component: () => import('pages/indicador-pessoal/VersoesPage.vue'),
-        meta: { title: 'Histórico de Versões' },
-      },
     ],
   },
 

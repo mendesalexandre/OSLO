@@ -50,6 +50,11 @@ export const useIndicadorPessoalStore = defineStore('indicador-pessoal', () => {
     return response.data.dados
   }
 
+  async function duplicar(id, motivo) {
+    const response = await api.post(`${path}/${id}/duplicar`, { motivo_versao: motivo })
+    return response.data.dados
+  }
+
   return {
     lista,
     paginacao,
@@ -63,5 +68,6 @@ export const useIndicadorPessoalStore = defineStore('indicador-pessoal', () => {
     atualizar,
     excluir,
     buscar,
+    duplicar,
   }
 })

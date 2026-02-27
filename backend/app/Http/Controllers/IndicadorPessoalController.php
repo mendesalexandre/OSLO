@@ -165,6 +165,49 @@ class IndicadorPessoalController extends Controller
         return $this->sucesso(null, 'Registro excluído com sucesso');
     }
 
+    public function duplicar(Request $request, int $id): JsonResponse
+    {
+        $versao = IndicadorPessoal::find($id);
+
+        if (!$versao) {
+            return $this->naoEncontrado('Versão não encontrada');
+        }
+
+        $validated = $request->validate([
+            'motivo_versao' => 'required|string|max:500',
+        ]);
+
+        $versaoAtual = IndicadorPessoal::atual()
+            ->where('cpf_cnpj', $versao->cpf_cnpj)
+            ->first();
+
+        if (!$versaoAtual) {
+            return $this->naoEncontrado('Versão atual não encontrada para este CPF/CNPJ');
+        }
+
+        $dados = $versao->only([
+            'tipo_pessoa', 'ficha', 'nome', 'nome_fantasia',
+            'rg', 'orgao_expedidor', 'data_expedicao_rg', 'data_nascimento', 'data_obito',
+            'sexo', 'nome_pai', 'nome_mae',
+            'estado_civil_id', 'regime_bem_id', 'data_casamento', 'anterior_lei_6515', 'conjuge_id',
+            'capacidade_civil_id', 'representante_legal',
+            'nacionalidade_id', 'naturalidade', 'profissao_id',
+            'data_abertura', 'data_encerramento', 'sede', 'objeto_social',
+            'tipo_empresa_id', 'porte_empresa_id', 'inscricao_estadual', 'inscricao_municipal',
+            'pessoa_politicamente_exposta', 'servidor_publico', 'cargo_funcao', 'orgao_entidade',
+            'cep', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'pais',
+            'observacoes', 'is_ativo',
+        ]);
+
+        $novaVersao = $versaoAtual->criarNovaVersao($dados, $validated['motivo_versao']);
+
+        return $this->criado(
+            $novaVersao->load(['estadoCivil', 'regimeBem', 'conjuge', 'capacidadeCivil',
+                'nacionalidade', 'profissao', 'tipoEmpresa', 'porteEmpresa', 'socios.socio']),
+            'Nova versão criada com sucesso'
+        );
+    }
+
     public function busca(Request $request): JsonResponse
     {
         $request->validate(['q' => 'required|string|min:2']);

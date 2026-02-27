@@ -96,7 +96,7 @@
               dense
               icon="history"
               color="grey-7"
-              :to="{ name: 'indicador-pessoal.versoes', params: { cpfCnpj: props.row.cpf_cnpj } }"
+              @click="abrirVersoes(props.row)"
             >
               <q-tooltip>Histórico de versões</q-tooltip>
             </q-btn>
@@ -121,6 +121,13 @@
       :id="idSelecionado"
       @salvo="buscar"
     />
+
+    <!-- Modal histórico de versões -->
+    <ModalVersoesIndicadorPessoal
+      v-model="modalVersoesAberto"
+      :cpf-cnpj="cpfCnpjSelecionado"
+      @atualizado="buscar"
+    />
   </q-page>
 </template>
 
@@ -130,6 +137,7 @@ import { useQuasar } from 'quasar'
 import { useIndicadorPessoalStore } from 'src/stores/indicador-pessoal'
 import BadgeIndisponibilidade from 'src/components/indicador-pessoal/BadgeIndisponibilidade.vue'
 import ModalIndicadorPessoal from 'src/components/indicador-pessoal/ModalIndicadorPessoal.vue'
+import ModalVersoesIndicadorPessoal from 'src/components/indicador-pessoal/ModalVersoesIndicadorPessoal.vue'
 
 const $q = useQuasar()
 const indicadorPessoalStore = useIndicadorPessoalStore()
@@ -137,6 +145,8 @@ const indicadorPessoalStore = useIndicadorPessoalStore()
 const filtros = reactive({ busca: '', tipo_pessoa: null })
 const modalAberto = ref(false)
 const idSelecionado = ref(null)
+const modalVersoesAberto = ref(false)
+const cpfCnpjSelecionado = ref(null)
 
 const tiposPessoa = [
   { label: 'Pessoa Física', value: 'F' },
@@ -169,6 +179,11 @@ function abrirNovo() {
 function abrirEditar(registro) {
   idSelecionado.value = registro.id
   modalAberto.value = true
+}
+
+function abrirVersoes(registro) {
+  cpfCnpjSelecionado.value = registro.cpf_cnpj
+  modalVersoesAberto.value = true
 }
 
 function buscar() {

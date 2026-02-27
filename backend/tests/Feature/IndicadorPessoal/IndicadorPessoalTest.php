@@ -255,6 +255,42 @@ test('estado civil casado exige regime de bens', function () {
     expect($response->json('erros'))->toHaveKey('regime_bem_id');
 });
 
+// ── Duplicar versão ───────────────────────────────────────────────────────
+
+test('duplicar cria nova versão a partir de qualquer versão', function () {
+    $v1 = indicadorPF(['nome' => 'João v1']);
+
+    // Cria v2 (v1 vira não-atual)
+    $this->actingAs(usuario(), 'web')
+        ->putJson("/api/v1/indicador-pessoal/{$v1->id}", [
+            'tipo_pessoa'   => 'F',
+            'cpf_cnpj'     => CPF_VALIDO,
+            'nome'         => 'João v2',
+            'motivo_versao' => 'Atualização',
+        ]);
+
+    // Duplica a partir da v1 (versão não-atual)
+    $response = $this->actingAs(usuario(), 'web')
+        ->postJson("/api/v1/indicador-pessoal/{$v1->id}/duplicar", [
+            'motivo_versao' => 'Restaurando dados da v1',
+        ]);
+
+    $response->assertStatus(201)
+             ->assertJsonPath('dados.versao', 3)
+             ->assertJsonPath('dados.nome', 'João v1')
+             ->assertJsonPath('dados.motivo_versao', 'Restaurando dados da v1')
+             ->assertJsonPath('dados.is_atual', true);
+});
+
+test('duplicar sem motivo retorna 422', function () {
+    $v1 = indicadorPF();
+
+    $response = $this->actingAs(usuario(), 'web')
+        ->postJson("/api/v1/indicador-pessoal/{$v1->id}/duplicar", []);
+
+    $response->assertStatus(422);
+});
+
 test('estado civil casado com regime de bens e cônjuge válido é aceito', function () {
     $estadoCivilCasado = EstadoCivil::create([
         'descricao' => 'Casado(a)',
