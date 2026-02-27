@@ -20,6 +20,20 @@ export default boot(({ app, router }) => {
       const status = error.response?.status
       const url = error.config?.url ?? ''
 
+      // CSRF token expirado ou inválido — re-fetcha e repete a request uma vez
+      if (status === 419 && !error.config._csrfRetry) {
+        try {
+          const { data: csrf } = await api.get('/v1/csrf-token')
+          api.defaults.headers.common['X-CSRF-TOKEN'] = csrf.token
+
+          const config = { ...error.config, _csrfRetry: true }
+          config.headers['X-CSRF-TOKEN'] = csrf.token
+          return api(config)
+        } catch {
+          // Se o retry também falhar, deixa propagar
+        }
+      }
+
       if (status === 401 && !url.includes('/auth/login')) {
         const { useAuthStore } = await import('src/stores/auth')
         const authStore = useAuthStore()
