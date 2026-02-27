@@ -1,8 +1,5 @@
 export const setTitulo = (titulo = "Nome da Página") => {
-  document.title = `${titulo.replace(
-    " - Sistema Asgard",
-    ""
-  )} - Sistema Asgard`;
+  document.title = `${titulo.replace(" - Sistema Oslo", "")} - Sistema Oslo`;
 };
 
 export default async function getCep(cep, comercial) {
@@ -43,25 +40,25 @@ export const formatarDinheiroBrasil = (value) => {
 };
 
 export const formatarData = (dataString) => {
-  if (!dataString) return '-';
+  if (!dataString) return "-";
 
   const data = new Date(dataString);
-  const dia = String(data.getDate()).padStart(2, '0');
-  const mes = String(data.getMonth() + 1).padStart(2, '0');
+  const dia = String(data.getDate()).padStart(2, "0");
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
   const ano = data.getFullYear();
 
   return `${dia}/${mes}/${ano}`;
 };
 
 export const formatarDataHora = (dataString) => {
-  if (!dataString) return '-';
+  if (!dataString) return "-";
 
   const data = new Date(dataString);
-  const dia = String(data.getDate()).padStart(2, '0');
-  const mes = String(data.getMonth() + 1).padStart(2, '0');
+  const dia = String(data.getDate()).padStart(2, "0");
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
   const ano = data.getFullYear();
-  const horas = String(data.getHours()).padStart(2, '0');
-  const minutos = String(data.getMinutes()).padStart(2, '0');
+  const horas = String(data.getHours()).padStart(2, "0");
+  const minutos = String(data.getMinutes()).padStart(2, "0");
 
   return `${dia}/${mes}/${ano} ${horas}:${minutos}`;
 };

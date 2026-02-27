@@ -13,11 +13,7 @@ export default defineConfig((ctx) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
-    boot: [
-      "pinia",
-      "axios",
-      "auth",
-    ],
+    boot: ["pinia", "axios", "auth"],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#css
     css: [
@@ -81,16 +77,12 @@ export default defineConfig((ctx) => {
         type: "http",
       },
       open: true, // opens browser window automatically
-      proxy: {
-        "/api": { target: "http://localhost:8000", changeOrigin: true },
-        "/sanctum": { target: "http://localhost:8000", changeOrigin: true },
-      },
     },
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#framework
     framework: {
       config: {
-        brand: { primary: '#09090b' },
+        brand: { primary: "#09090b" },
       },
 
       // iconSet: 'material-icons', // Quasar icon set

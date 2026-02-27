@@ -226,6 +226,13 @@
         </q-card-section>
       </q-card>
 
+      <!-- Indisponibilidades (somente edição) -->
+      <IndisponibilidadesPanel
+        v-if="isEdicao && form.cpf_cnpj"
+        :cpf-cnpj="form.cpf_cnpj"
+        class="q-mb-md"
+      />
+
       <!-- Motivo versão (somente edição) -->
       <q-card v-if="isEdicao" flat bordered class="q-mb-md bg-amber-1">
         <q-card-section>
@@ -265,6 +272,7 @@ import { useIndicadorPessoalStore } from 'src/stores/indicador-pessoal'
 import SelectAuxiliar from 'src/components/base/SelectAuxiliar.vue'
 import BuscaAutocomplete from 'src/components/indicador-pessoal/BuscaAutocomplete.vue'
 import { useAuxiliaresStore } from 'src/stores/auxiliares'
+import IndisponibilidadesPanel from 'src/components/indicador-pessoal/IndisponibilidadesPanel.vue'
 
 const route = useRoute()
 const router = useRouter()

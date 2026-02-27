@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CapacidadeCivil;
 use App\Models\EstadoCivil;
+use App\Models\Indisponibilidade;
 use App\Models\IndicadorPessoal;
 use App\Rules\ValidarDocumento;
 use App\Traits\RespostaApi;
@@ -19,7 +20,13 @@ class IndicadorPessoalController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = IndicadorPessoal::atual()->ativo()
-            ->with(['estadoCivil', 'profissao', 'nacionalidade']);
+            ->with(['estadoCivil', 'profissao', 'nacionalidade'])
+            ->withCount([
+                'indisponibilidades as indisponibilidades_count' => function ($q) {
+                    $q->whereNotIn('status', ['cancelada'])
+                      ->whereNull('data_exclusao');
+                },
+            ]);
 
         if ($busca = $request->input('busca')) {
             $query->where(function ($q) use ($busca) {
@@ -47,7 +54,16 @@ class IndicadorPessoalController extends Controller
             return $this->naoEncontrado('Indicador pessoal não encontrado');
         }
 
-        return $this->sucesso($indicador);
+        $indisponibilidades = Indisponibilidade::with('partes.matriculas')
+            ->whereNull('data_exclusao')
+            ->whereNotIn('status', ['cancelada'])
+            ->whereHas('partes', fn ($q) => $q->where('cpf_cnpj', $indicador->cpf_cnpj))
+            ->orderByDesc('data_cadastro')
+            ->get();
+
+        return $this->sucesso(
+            array_merge($indicador->toArray(), ['indisponibilidades' => $indisponibilidades])
+        );
     }
 
     public function versoes(string $cpfCnpj): JsonResponse

@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import axios from 'axios'
-import { api, apiUrl } from 'src/boot/axios'
+import { api } from 'src/boot/axios'
 
 const path = '/v1/auth'
 
@@ -10,19 +9,14 @@ export const useAuthStore = defineStore('auth', () => {
   const autenticado = computed(() => usuario.value !== null)
 
   async function login(email, senha) {
-    // Usa axios direto (sem interceptores) para o fluxo de autenticação Sanctum.
-    // Com o proxy do dev server, '/sanctum/csrf-cookie' e '/api/...' são same-origin,
-    // então os cookies SameSite=Lax são enviados corretamente.
-    await axios.get(`${apiUrl}/sanctum/csrf-cookie`, { withCredentials: true })
+    // Inicia a sessão e obtém o token CSRF no corpo da resposta.
+    // Necessário para cross-origin (localhost:9000 → localhost:8000): document.cookie
+    // não consegue ler cookies de portas diferentes no Chrome, então usamos
+    // X-CSRF-TOKEN (plaintext) em vez de X-XSRF-TOKEN (baseado em cookie).
+    const { data: csrf } = await api.get('/v1/csrf-token')
+    api.defaults.headers.common['X-CSRF-TOKEN'] = csrf.token
 
-    const response = await axios.post(
-      `${apiUrl}/api/v1/auth/login`,
-      { email, senha },
-      {
-        withCredentials: true,
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      },
-    )
+    const response = await api.post(`${path}/login`, { email, senha })
     usuario.value = response.data.dados
   }
 
@@ -36,11 +30,6 @@ export const useAuthStore = defineStore('auth', () => {
     usuario.value = response.data.dados
   }
 
-  async function refresh() {
-    const response = await api.post(`${path}/refresh`)
-    usuario.value = response.data.dados
-  }
-
   function limpar() {
     usuario.value = null
   }
@@ -51,7 +40,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     buscarMe,
-    refresh,
     limpar,
   }
 })

@@ -2,14 +2,10 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { Notify } from 'quasar'
 
-// URL base do backend sem o prefixo /api
-// Se API_URL é relativa (ex: '/api'), apiUrl fica '' (same-origin via proxy)
-// Se API_URL é absoluta (ex: 'http://localhost:8000/api'), extrai a origem
-const rawApiUrl = process.env.API_URL || '/api'
-export const apiUrl = rawApiUrl.startsWith('http') ? rawApiUrl.replace(/\/api\/?$/, '') : ''
-
+// API_URL deve ser a URL absoluta do backend incluindo /api
+// Ex: http://localhost:8000/api (dev) | https://api.sistemaoslo.com.br/api (prod)
 const api = axios.create({
-  baseURL: process.env.API_URL,   // ex: 'http://localhost:8000/api'
+  baseURL: process.env.API_URL || '',
   withCredentials: true,
   headers: {
     Accept: 'application/json',
@@ -40,7 +36,7 @@ export default boot(({ app, router }) => {
       }
 
       return Promise.reject(error)
-    }
+    },
   )
 
   app.config.globalProperties.$api = api

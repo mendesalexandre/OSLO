@@ -44,6 +44,44 @@ const routes = [
   },
 
   {
+    path: '/indisponibilidades',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'indisponibilidades.lista',
+        component: () => import('pages/indisponibilidade/ListaPage.vue'),
+        meta: { title: 'Indisponibilidades' },
+      },
+      {
+        path: 'nova',
+        name: 'indisponibilidades.nova',
+        component: () => import('pages/indisponibilidade/FormPage.vue'),
+        meta: { title: 'Nova Indisponibilidade' },
+      },
+      {
+        path: ':id/editar',
+        name: 'indisponibilidades.editar',
+        component: () => import('pages/indisponibilidade/FormPage.vue'),
+        meta: { title: 'Editar Indisponibilidade' },
+      },
+    ],
+  },
+
+  {
+    path: '/consulta',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'consulta.geral',
+        component: () => import('pages/consulta/ConsultaGeralPage.vue'),
+        meta: { title: 'Consulta Geral' },
+      },
+    ],
+  },
+
+  {
     path: '/auth',
     component: () => import('layouts/AuthLayout.vue'),
     children: [

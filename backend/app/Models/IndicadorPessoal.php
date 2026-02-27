@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
@@ -117,6 +118,18 @@ class IndicadorPessoal extends Model
     {
         return $this->hasMany(static::class, 'cpf_cnpj', 'cpf_cnpj')
                     ->orderByDesc('versao');
+    }
+
+    public function indisponibilidades(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Indisponibilidade::class,
+            IndisponibilidadeParte::class,
+            'cpf_cnpj',   // FK em indisponibilidade_parte → cpf_cnpj local do indicador
+            'id',          // PK em indisponibilidade
+            'cpf_cnpj',   // local key em indicador_pessoal
+            'indisponibilidade_id' // FK em indisponibilidade_parte → indisponibilidade
+        );
     }
 
     // Cria uma nova versão desativando a atual
