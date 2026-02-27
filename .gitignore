@@ -1,0 +1,20 @@
+# Backend
+backend/vendor/
+backend/.env
+backend/storage/logs/
+backend/storage/app/public/
+backend/.phpunit.result.cache
+backend/node_modules/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.quasar/
+frontend/.output/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp

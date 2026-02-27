@@ -1,0 +1,65 @@
+{
+    "dados_assinatura": {
+        "signers": [
+            {
+                "certificate": {
+                    "thumbprint": "3666d8a4a99bde15ba0ae1931a0790930eb33f37",
+                    "thumbprintSHA256": "6e47d69e074496e39d611076d0f0f78eaefa062bde72ad4672a1d280bb0cacb2",
+                    "subjectCommonName": "ANDRE LUIS GIOCONDO:53591089168",
+                    "subjectDisplayName": "ANDRE LUIS GIOCONDO",
+                    "subjectIdentifier": "53591089168",
+                    "emailAddress": "financeiro@1oficiosinop.com.br",
+                    "organization": null,
+                    "organizationIdentifier": null
+                },
+                "date": "2025-08-16T00:58:41.748+00:00"
+            }
+        ],
+        "metadata": {
+            "validade": [
+                "2025-09-14"
+            ],
+            "cns": [
+                "065524"
+            ],
+            "cartorio": [
+                "1º OFÍCIO DE REGISTRO DE IMÓVEIS DE SINOP - MT"
+            ]
+        },
+        "id": "eea4926e-915d-493a-8edc-0198b062c87a",
+        "key": "RSGP5UV6QA9BB6UFH3Y8",
+        "formattedKey": "RSGP5-UV6QA-9BB6U-FH3Y8",
+        "originalFile": {
+            "mimeType": "application/pdf",
+            "content": null,
+            "blobToken": null,
+            "url": "https://assinador-web.onr.org.br/api/documents/eea4926e-915d-493a-8edc-0198b062c87a/original-file?access_ticket=CfDJ8PqdrwIu58ZElppg8kZtzdNsZ2HgEhByttsD4Zm3z2XeCvvPzbLIQ8wBbPeyNq8FWJrFHZQT0uCtFh2QXQ1UV699IO1MiSZg7b3IlXav1tiWtoP-acnFEHSp-XS0POqn8E8_TklNpvPYTI3lsRQADN6SG0sqIfKzeDVjfWonrsHJmnuEtOCxIwdS29PUCNYlV4vlv6YU5zL0TW0v6dQX51I&culture=pt",
+            "name": "S25080305170D_77717_assinado.pdf",
+            "length": 1468828,
+            "contentType": "application/pdf",
+            "location": "https://assinador-web.onr.org.br/api/documents/eea4926e-915d-493a-8edc-0198b062c87a/original-file?access_ticket=CfDJ8PqdrwIu58ZElppg8kZtzdNsZ2HgEhByttsD4Zm3z2XeCvvPzbLIQ8wBbPeyNq8FWJrFHZQT0uCtFh2QXQ1UV699IO1MiSZg7b3IlXav1tiWtoP-acnFEHSp-XS0POqn8E8_TklNpvPYTI3lsRQADN6SG0sqIfKzeDVjfWonrsHJmnuEtOCxIwdS29PUCNYlV4vlv6YU5zL0TW0v6dQX51I&culture=pt"
+        },
+        "markedFile": {
+            "mimeType": "application/pdf",
+            "content": null,
+            "blobToken": null,
+            "url": "https://assinador-web.onr.org.br/api/documents/eea4926e-915d-493a-8edc-0198b062c87a/marked-file?access_ticket=CfDJ8PqdrwIu58ZElppg8kZtzdM8CCfmTcgA7yhv7Hrqi7pg0C_eHGwHB6lz46YSfsnIlPWvCdfK4vt3pQXYs5ldvuwMTwgG-be3wXLea4MYgSA9w_fBWbttWVCF4ihsfuC0AgqMAFyfLwrMZkBSCNfM-zVovdbd7XIHPgy0oVI6i8nF6ifHB2-nMfsqjRtlGviMLg_wKsklr1OV1jxVa56dNv0&culture=pt",
+            "name": "S25080305170D_77717_assinado.pdf",
+            "length": 1536061,
+            "contentType": "application/pdf",
+            "location": "https://assinador-web.onr.org.br/api/documents/eea4926e-915d-493a-8edc-0198b062c87a/marked-file?access_ticket=CfDJ8PqdrwIu58ZElppg8kZtzdM8CCfmTcgA7yhv7Hrqi7pg0C_eHGwHB6lz46YSfsnIlPWvCdfK4vt3pQXYs5ldvuwMTwgG-be3wXLea4MYgSA9w_fBWbttWVCF4ihsfuC0AgqMAFyfLwrMZkBSCNfM-zVovdbd7XIHPgy0oVI6i8nF6ifHB2-nMfsqjRtlGviMLg_wKsklr1OV1jxVa56dNv0&culture=pt"
+        },
+        "signedFile": {
+            "mimeType": "application/pdf",
+            "content": null,
+            "blobToken": null,
+            "url": "https://assinador-web.onr.org.br/api/documents/eea4926e-915d-493a-8edc-0198b062c87a/signed-file?access_ticket=CfDJ8PqdrwIu58ZElppg8kZtzdNw__7ikobgpyJvzq7N9GBLyiRq50zq-nsOSrS-tNVZ-cHLnArUceJOkf6TZDO3U4XmTkmgRKvwEuG4MQFo9usAfgW_T4k0dRtv2CbLGMtVCWVVAuvbiFsWv3yT7CMH0otN9Epy_zlmGmULEztc3NBNlSLeFKuXl_ATNEq9jx3_UsnB4BLD_icNksUT-rpJP8o&culture=pt",
+            "name": "S25080305170D_77717_assinado.pdf",
+            "length": 1657825,
+            "contentType": "application/pdf",
+            "location": "https://assinador-web.onr.org.br/api/documents/eea4926e-915d-493a-8edc-0198b062c87a/signed-file?access_ticket=CfDJ8PqdrwIu58ZElppg8kZtzdNw__7ikobgpyJvzq7N9GBLyiRq50zq-nsOSrS-tNVZ-cHLnArUceJOkf6TZDO3U4XmTkmgRKvwEuG4MQFo9usAfgW_T4k0dRtv2CbLGMtVCWVVAuvbiFsWv3yT7CMH0otN9Epy_zlmGmULEztc3NBNlSLeFKuXl_ATNEq9jx3_UsnB4BLD_icNksUT-rpJP8o&culture=pt"
+        },
+        "signatureType": "Pdf",
+        "availableUntil": "2026-08-16T00:58:41.5427216+00:00"
+    }
+}

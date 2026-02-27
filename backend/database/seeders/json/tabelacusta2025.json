@@ -1,0 +1,50 @@
+[
+    {
+        "codigo_ato": "53",
+        "nome": "27 - b) Registro, Inclusive indicações reais e pessoais (acima de R$ 2.321,56)",
+        "ano": 2025,
+        "is_ativo": true,
+        "vigencia_inicio": "2025-01-01 00:00:00",
+        "vigencia_fim": "2025-12-31 23:59:59",
+
+        "tipo_calculo": "FAIXA_PROGRESSIVA",
+        "valor_servico": 100.3,
+        "valor_inicio_incremento": 2321.56,
+        "valor_faixa": 1160.91,
+        "valor_acrescimo": 25.58,
+        "valor_maximo": 6026.4,
+
+        "permitir_base_calculo": true,
+        "permitir_desconto": false,
+        "permitir_funajuris": true,
+        "permitir_registro_civil": true,
+        "permitir_iss": true,
+
+        "exige_ato_pai": false,
+        "ato_pai_id": null
+    },
+    {
+        "codigo_ato": "54",
+        "nome": "27 - c) Pela Matrícula",
+        "ano": 2025,
+        "is_ativo": true,
+        "vigencia_inicio": "2025-01-01 00:00:00",
+        "vigencia_fim": "2025-12-31 23:59:59",
+
+        "tipo_calculo": "FIXO",
+        "valor_servico": 98.55,
+        "valor_inicio_incremento": null,
+        "valor_faixa": null,
+        "valor_acrescimo": null,
+        "valor_maximo": null,
+
+        "permitir_base_calculo": false,
+        "permitir_desconto": false,
+        "permitir_funajuris": true,
+        "permitir_registro_civil": true,
+        "permitir_iss": true,
+
+        "exige_ato_pai": false,
+        "ato_pai_id": null
+    }
+]

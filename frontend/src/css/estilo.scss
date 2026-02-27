@@ -1,0 +1,508 @@
+:root {
+  // Cores do sistema
+  --system-bg-primary: #fafafa;
+  --system-bg-secondary: #f5f5f5;
+  --system-bg-white: #ffffff;
+  --system-border-default: #e0e0e0;
+  --system-border-hover: #cccccc;
+  --system-border-focus: var(--q-primary);
+  --system-text-primary: #37474f;
+  --system-text-secondary: #607d8b;
+  --system-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --system-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --system-radius: 2px;
+  --system-transition: all 0.2s ease;
+}
+
+// ========================================
+// Q-INPUT - CAMPOS DE ENTRADA
+// ========================================
+.q-field {
+  // Estilo base do campo
+  .q-field__control {
+    background-color: var(--system-bg-primary) !important;
+    border-color: var(--system-border-default) !important;
+    border-radius: var(--system-radius) !important;
+    transition: var(--system-transition) !important;
+
+    &:hover {
+      background-color: var(--system-bg-secondary) !important;
+      border-color: var(--system-border-hover) !important;
+    }
+  }
+
+  // Estado focado
+  &.q-field--focused .q-field__control {
+    background-color: var(--system-bg-white) !important;
+    border-color: var(--system-border-focus) !important;
+    box-shadow: 0 0 0 2px rgba(var(--q-primary-rgb), 0.2) !important;
+  }
+
+  // Estado com erro
+  &.q-field--error .q-field__control {
+    border-color: var(--q-negative) !important;
+    background-color: rgba(var(--q-negative-rgb), 0.05) !important;
+  }
+
+  // Estado desabilitado
+  &.q-field--disabled .q-field__control {
+    background-color: #f0f0f0 !important;
+    border-color: #e0e0e0 !important;
+    opacity: 0.6 !important;
+  }
+
+  // Texto interno
+  .q-field__native {
+    color: var(--system-text-primary) !important;
+    font-weight: 400 !important;
+  }
+
+  // Labels
+  .q-field__label {
+    color: var(--system-text-secondary) !important;
+    font-weight: 500 !important;
+  }
+
+  // Placeholder
+  .q-field__native::placeholder {
+    color: #9e9e9e !important;
+    opacity: 0.7 !important;
+  }
+}
+
+// ========================================
+// Q-SELECT - CAMPOS DE SELEÇÃO
+// ========================================
+.q-select {
+  .q-field__control {
+    background-color: var(--system-bg-primary) !important;
+    border-color: var(--system-border-default) !important;
+
+    &:hover {
+      background-color: var(--system-bg-secondary) !important;
+      border-color: var(--system-border-hover) !important;
+    }
+  }
+
+  &.q-field--focused .q-field__control {
+    background-color: var(--system-bg-white) !important;
+    border-color: var(--system-border-focus) !important;
+  }
+
+  // Dropdown
+  .q-field__append {
+    .q-icon {
+      color: var(--system-text-secondary) !important;
+      transition: var(--system-transition) !important;
+    }
+  }
+
+  &.q-field--focused .q-field__append .q-icon {
+    color: var(--q-primary) !important;
+  }
+}
+
+// Menu dropdown do select
+.q-menu {
+  border-radius: var(--system-radius) !important;
+  box-shadow: var(--system-shadow-medium) !important;
+  border: 1px solid var(--system-border-default) !important;
+
+  .q-item {
+    transition: var(--system-transition) !important;
+
+    &:hover {
+      background-color: var(--system-bg-primary) !important;
+    }
+
+    &.q-item--active {
+      background-color: rgba(var(--q-primary-rgb), 0.1) !important;
+      color: var(--q-primary) !important;
+    }
+  }
+}
+
+// ========================================
+// Q-TEXTAREA - ÁREA DE TEXTO
+// ========================================
+.q-textarea {
+  .q-field__control {
+    background-color: var(--system-bg-primary) !important;
+    border-color: var(--system-border-default) !important;
+    min-height: 80px !important;
+
+    &:hover {
+      background-color: var(--system-bg-secondary) !important;
+      border-color: var(--system-border-hover) !important;
+    }
+  }
+
+  &.q-field--focused .q-field__control {
+    background-color: var(--system-bg-white) !important;
+    border-color: var(--system-border-focus) !important;
+  }
+
+  .q-field__native {
+    resize: vertical !important;
+    min-height: 60px !important;
+  }
+}
+
+// ========================================
+// Q-BTN - BOTÕES
+// ========================================
+.q-btn {
+  border-radius: var(--system-radius) !important;
+  font-weight: 500 !important;
+  transition: var(--system-transition) !important;
+
+  // Botão primário
+  &.q-btn--unelevated.q-btn--rectangle.bg-primary {
+    box-shadow: var(--system-shadow-light) !important;
+
+    &:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: var(--system-shadow-medium) !important;
+    }
+  }
+
+  // Botão outline
+  &.q-btn--outline {
+    border-width: 1px !important;
+
+    &:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: var(--system-shadow-light) !important;
+    }
+  }
+
+  // Botão flat
+  &.q-btn--flat {
+    &:hover {
+      background-color: rgba(var(--q-primary-rgb), 0.1) !important;
+    }
+  }
+
+  // Botões de ação pequenos (action-btn)
+  &.action-btn {
+    transition: var(--system-transition) !important;
+
+    &:hover {
+      transform: scale(1.1) !important;
+    }
+  }
+
+  // Botões customizados (btn-custom)
+  &.btn-custom {
+    transition: var(--system-transition) !important;
+
+    &:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: var(--system-shadow-light) !important;
+    }
+  }
+}
+
+// ========================================
+// Q-CARD - CARTÕES
+// ========================================
+.q-card {
+  border-radius: var(--system-radius) !important;
+  box-shadow: var(--system-shadow-light) !important;
+  border: 1px solid var(--system-border-default) !important;
+
+  // Header das seções
+  .section-header {
+    display: flex !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border-radius: var(--system-radius) var(--system-radius) 0 0 !important;
+
+    .section-title {
+      font-size: 0.875rem !important;
+      font-weight: 600;
+      color: var(--system-text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .q-icon {
+      color: var(--system-text-secondary);
+      font-size: 1.1rem;
+    }
+  }
+}
+
+// ========================================
+// Q-TABLE - TABELAS
+// ========================================
+.q-table {
+  border-radius: var(--system-radius);
+  border: 1px solid var(--system-border-default);
+
+  // Header da tabela
+  .q-table__top {
+    background-color: var(--system-bg-primary);
+    border-bottom: 1px solid var(--system-border-default);
+  }
+
+  // Headers das colunas
+  .table-header,
+  .q-table th {
+    background-color: var(--system-bg-primary);
+    color: var(--system-text-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--system-border-default);
+  }
+
+  // Linhas do corpo
+  tbody tr {
+    border-bottom: 1px solid var(--system-border-default);
+    transition: var(--system-transition);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: var(--system-bg-primary);
+    }
+  }
+
+  // Footer da tabela
+  .q-table__bottom {
+    background-color: var(--system-bg-primary);
+    border-top: 1px solid var(--system-border-default);
+    color: var(--system-text-primary);
+  }
+
+  // Loading personalizado
+  .q-inner-loading {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+// ========================================
+// Q-CHIP - CHIPS/TAGS
+// ========================================
+.q-chip {
+  border-radius: var(--system-radius);
+  font-weight: 400;
+  color: #37474f;
+  // text-overflow: ellipsis;
+  // text-transform: uppercase;
+
+  // Chip de status
+  &.status-chip {
+    border-radius: var(--system-radius);
+    font-size: 0.75rem;
+  }
+}
+
+// ========================================
+// Q-TOGGLE - INTERRUPTORES
+// ========================================
+.q-toggle {
+  .q-toggle__label {
+    color: var(--system-text-primary);
+    font-weight: 400;
+  }
+
+  .q-toggle__track {
+    transition: var(--system-transition);
+  }
+}
+
+// ========================================
+// Q-TABS - ABAS
+// ========================================
+.q-tabs {
+  .q-tab {
+    transition: var(--system-transition);
+
+    // &:hover {
+    //   background-color: rgba(var(--q-primary-rgb), 0.1);
+    // }
+  }
+
+  .q-tab--active {
+    color: var(--q-primary);
+    font-weight: 600;
+    font-size: 12px !important;
+  }
+}
+
+// ========================================
+// Q-DIALOG - DIÁLOGOS/MODAIS
+// ========================================
+.q-dialog {
+  .q-card {
+    border-radius: var(--system-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// ========================================
+// Q-TOOLTIP - TOOLTIPS
+// ========================================
+.q-tooltip {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: var(--system-radius);
+  font-size: 0.75rem;
+  padding: 4px 8px;
+}
+
+// ========================================
+// Q-NOTIFICATION - NOTIFICAÇÕES
+// ========================================
+.q-notification {
+  border-radius: var(--system-radius);
+  box-shadow: var(--system-shadow-medium);
+
+  .q-notification__icon {
+    font-size: 1.2rem;
+  }
+}
+
+// ========================================
+// Q-SEPARATOR - SEPARADORES
+// ========================================
+.q-separator {
+  background-color: var(--system-border-default);
+}
+
+// ========================================
+// CLASSES UTILITÁRIAS CUSTOMIZADAS
+// ========================================
+
+// Inputs customizados
+.custom-input {
+  .q-field__control {
+    background-color: var(--system-bg-primary);
+    border-color: var(--system-border-default);
+
+    &:hover {
+      background-color: var(--system-bg-secondary);
+      border-color: var(--system-border-hover);
+    }
+  }
+
+  &.q-field--focused .q-field__control {
+    background-color: var(--system-bg-white);
+    border-color: var(--system-border-focus);
+  }
+
+  .q-field__native {
+    color: var(--system-text-primary);
+  }
+}
+
+// Selects customizados
+.custom-select {
+  .q-field__control {
+    background-color: var(--system-bg-primary);
+    border-color: var(--system-border-default);
+
+    &:hover {
+      background-color: var(--system-bg-secondary);
+      border-color: var(--system-border-hover);
+    }
+  }
+
+  &.q-field--focused .q-field__control {
+    background-color: var(--system-bg-white);
+    border-color: var(--system-border-focus);
+  }
+}
+
+// Editor customizado
+.custom-editor {
+  .q-field__control {
+    min-height: 200px;
+    background-color: var(--system-bg-primary);
+
+    &:hover {
+      background-color: var(--system-bg-secondary);
+    }
+  }
+
+  &.q-field--focused .q-field__control {
+    background-color: var(--system-bg-white);
+  }
+}
+
+// Toggle customizado
+.custom-toggle {
+  .q-toggle__label {
+    color: var(--system-text-primary);
+    font-weight: 500;
+  }
+}
+
+// ========================================
+// RESPONSIVIDADE GLOBAL
+// ========================================
+@media (max-width: 768px) {
+  // Ajustes para mobile
+  .q-field {
+    .q-field__control {
+      font-size: 0.9rem;
+    }
+  }
+
+  .q-btn {
+    &.btn-custom {
+      .q-btn__content {
+        .q-icon + span {
+          display: none; // Oculta texto em botões no mobile
+        }
+      }
+    }
+  }
+
+  .section-header {
+    padding: 8px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    .section-title {
+      font-size: 0.8rem;
+    }
+
+    .row {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .q-table {
+    .q-table__top,
+    .q-table__bottom {
+      padding: 8px 12px;
+    }
+
+    .table-header {
+      font-size: 0.7rem;
+      padding: 8px 12px;
+    }
+  }
+}
+
+// ========================================
+// DARK MODE SUPPORT (OPCIONAL)
+// ========================================
+.body--dark {
+  --system-bg-primary: #2d2d2d;
+  --system-bg-secondary: #424242;
+  --system-bg-white: #1e1e1e;
+  --system-border-default: #424242;
+  --system-border-hover: #616161;
+  --system-text-primary: #ffffff;
+  --system-text-secondary: #b0bec5;
+}
