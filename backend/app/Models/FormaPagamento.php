@@ -16,9 +16,14 @@ class FormaPagamento extends Model
     const UPDATED_AT = 'data_alteracao';
     const DELETED_AT = 'data_exclusao';
 
-    protected $fillable = ['nome', 'is_ativo'];
+    protected $fillable = ['nome', 'descricao', 'is_ativo'];
 
     protected $casts = ['is_ativo' => 'boolean'];
+
+    public function scopeAtivo($query)
+    {
+        return $query->where('is_ativo', true);
+    }
 
     public function meiosPagamento(): HasMany
     {

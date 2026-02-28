@@ -215,13 +215,25 @@ const routes = [
       {
         path: '',
         name: 'administracao.index',
-        component: () => import('pages/EmDesenvolvimentoPage.vue'),
+        component: () => import('pages/administracao/Index.vue'),
         meta: { title: 'Administração' },
+      },
+      {
+        path: 'forma-pagamento',
+        name: 'administracao.forma-pagamento',
+        component: () => import('pages/administracao/FormaPagamentoPage.vue'),
+        meta: { title: 'Formas de Pagamento', permissao: ['FORMA_PAGAMENTO_LISTAR'] },
+      },
+      {
+        path: 'meio-pagamento',
+        name: 'administracao.meio-pagamento',
+        component: () => import('pages/administracao/MeioPagamentoPage.vue'),
+        meta: { title: 'Meios de Pagamento', permissao: ['MEIO_PAGAMENTO_LISTAR'] },
       },
       {
         path: 'categoria',
         name: 'administracao.categoria',
-        component: () => import('pages/EmDesenvolvimentoPage.vue'),
+        component: () => import('pages/administracao/CategoriaPage.vue'),
         meta: { title: 'Categorias', permissao: ['CATEGORIA_LISTAR'] },
       },
     ],

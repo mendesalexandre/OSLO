@@ -16,9 +16,22 @@ class MeioPagamento extends Model
     const UPDATED_AT = 'data_alteracao';
     const DELETED_AT = 'data_exclusao';
 
-    protected $fillable = ['forma_pagamento_id', 'nome', 'is_ativo'];
+    protected $fillable = [
+        'forma_pagamento_id', 'nome', 'descricao', 'identificador',
+        'taxa_percentual', 'taxa_fixa', 'prazo_compensacao', 'is_ativo',
+    ];
 
-    protected $casts = ['is_ativo' => 'boolean'];
+    protected $casts = [
+        'is_ativo'          => 'boolean',
+        'taxa_percentual'   => 'decimal:2',
+        'taxa_fixa'         => 'decimal:2',
+        'prazo_compensacao' => 'integer',
+    ];
+
+    public function scopeAtivo($query)
+    {
+        return $query->where('is_ativo', true);
+    }
 
     public function formaPagamento(): BelongsTo
     {

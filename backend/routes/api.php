@@ -3,10 +3,13 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuxiliarController;
 use App\Http\Controllers\BancoController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EstadoController;
+use App\Http\Controllers\FormaPagamentoController;
 use App\Http\Controllers\IndicadorPessoalController;
 use App\Http\Controllers\IndisponibilidadeController;
+use App\Http\Controllers\MeioPagamentoController;
 use App\Http\Controllers\NaturezaController;
 use App\Http\Controllers\ProtocoloController;
 use App\Http\Controllers\ProtocoloIsencaoController;
@@ -70,6 +73,20 @@ Route::prefix('v1')->group(function () {
         Route::get('transacoes/resumo', [TransacaoController::class, 'resumo'])->name('transacoes.resumo');
         Route::post('transacoes/{id}/confirmar', [TransacaoController::class, 'confirmar'])->name('transacoes.confirmar');
         Route::apiResource('transacoes', TransacaoController::class)->only([
+            'index', 'store', 'show', 'update', 'destroy',
+        ]);
+
+        // Administração — Financeiro
+        Route::apiResource('formas-pagamento', FormaPagamentoController::class)->only([
+            'index', 'store', 'show', 'update', 'destroy',
+        ]);
+        Route::apiResource('meios-pagamento', MeioPagamentoController::class)->only([
+            'index', 'store', 'show', 'update', 'destroy',
+        ]);
+
+        // Administração — Categorias
+        Route::get('categorias/todas', [CategoriaController::class, 'todas'])->name('categorias.todas');
+        Route::apiResource('categorias', CategoriaController::class)->only([
             'index', 'store', 'show', 'update', 'destroy',
         ]);
 
