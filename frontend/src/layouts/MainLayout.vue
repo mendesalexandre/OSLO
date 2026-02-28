@@ -166,6 +166,8 @@
     </q-page-container>
 
     <!-- Modais globais -->
+    <criar-protocolo v-model="modalCriarProtocolo" />
+    <menu-navegacao v-model="mostrarMenuNavegacao" />
   </q-layout>
 </template>
 
@@ -173,31 +175,37 @@
 import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
+import CriarProtocolo from "src/components/CriarProtocolo.vue";
+import MenuNavegacao from "src/components/Menu.vue";
 import TrialBanner from "src/components/TrialBanner.vue";
 import { useAuthStore } from "src/stores/auth";
+import { useEstadoStore } from "src/stores/estado";
+import { usePermissao } from "src/composables/usePermissao";
 import { menuItens } from "src/config/menu";
 
 defineOptions({ name: "MainLayout" });
 
-const $q = useQuasar();
+const $q     = useQuasar();
 const router = useRouter();
-const route = useRoute();
+const route  = useRoute();
 
-const authStore = useAuthStore();
-const user = computed(() => authStore.user?.user || authStore.user);
-const empresa = computed(() => user.value?.empresa);
+const authStore   = useAuthStore();
+const estadoStore = useEstadoStore();
+const { filtrarMenu } = usePermissao();
+
+const usuario  = computed(() => authStore.usuario);
+const empresa  = computed(() => authStore.empresa);
 const userInitial = computed(() => {
-  const nome = user.value?.nome || "U";
+  const nome = usuario.value?.nome || "U";
   return nome.charAt(0).toUpperCase();
 });
 
 const currentPageTitle = computed(() => route.meta?.title || "");
-
-// const menuFiltrado = computed(() => filtrarMenu(menuItens));
+const menuFiltrado = computed(() => filtrarMenu(menuItens));
 
 // Sidebar state
 const drawerOpen = ref(true);
-const miniState = ref(false);
+const miniState  = ref(false);
 
 const toggleMini = () => {
   if ($q.screen.lt.md) {
@@ -217,9 +225,8 @@ const isActiveRoute = (item) => {
   }
 };
 
-// Modais
+// Modais globais
 const modalCriarProtocolo = ref(false);
-const modalCriarIndicador = ref(false);
 const mostrarMenuNavegacao = ref(false);
 
 const handleMenuClick = async (item) => {
@@ -227,11 +234,10 @@ const handleMenuClick = async (item) => {
 
   if (item.acao === "criarProtocolo") {
     try {
-      await estadoStore.index();
+      await estadoStore.fetchEstados();
       modalCriarProtocolo.value = true;
-    } catch (error) {
-      console.error("Erro ao carregar estados:", error);
-      $q.notify({ type: "negative", message: "Erro ao carregar estados." });
+    } catch {
+      $q.notify({ type: "negative", message: "Erro ao carregar estados.", position: "top" });
     }
   } else if (item.acao === "menuNavegacao") {
     mostrarMenuNavegacao.value = !mostrarMenuNavegacao.value;

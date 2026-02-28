@@ -43,7 +43,7 @@ import { useAuthStore } from 'stores/auth'
 
 const authStore = useAuthStore()
 
-const empresa = computed(() => authStore.user?.empresa)
+const empresa = computed(() => authStore.empresa)
 const diasRestantes = computed(() => empresa.value?.dias_restantes_trial || 0)
 const isTrialAtivo = computed(() => empresa.value?.is_trial_ativo || false)
 const isReadOnly = computed(() => empresa.value?.is_read_only || false)

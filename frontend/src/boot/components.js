@@ -1,7 +1,6 @@
 import { boot } from "quasar/wrappers";
 
-// import VPassword from "src/components/VPassword.vue";
-// import VCpf from "src/components/VCpf.vue";
+import LIcon from "src/components/LIcon.vue";
 import Modal from "src/components/Modal.vue";
 import VLabel from "src/components/VLabel.vue";
 // import VCnpj from "src/components/VCnpj.vue";
@@ -13,6 +12,7 @@ import VLabel from "src/components/VLabel.vue";
 // import VSelectBanco from "src/components/VSelectBanco.vue";
 
 export default boot(({ app }) => {
+  app.component("l-icon", LIcon);
   app.component("modal", Modal);
   app.component("v-label", VLabel);
   // app.component("v-password", VPassword);

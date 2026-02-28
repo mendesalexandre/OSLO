@@ -4,8 +4,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuxiliarController;
 use App\Http\Controllers\BancoController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\IndicadorPessoalController;
 use App\Http\Controllers\IndisponibilidadeController;
+use App\Http\Controllers\NaturezaController;
+use App\Http\Controllers\ProtocoloController;
+use App\Http\Controllers\ProtocoloIsencaoController;
+use App\Http\Controllers\ProtocoloPagamentoController;
 use App\Http\Controllers\TipoTransacaoController;
 use App\Http\Controllers\TransacaoController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +37,10 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         // Tabelas auxiliares
         Route::get('auxiliares/{tabela}', [AuxiliarController::class, 'index'])->name('auxiliares.index');
+
+        // Tabelas globais de sistema
+        Route::get('estados', [EstadoController::class, 'index'])->name('estados.index');
+        Route::get('naturezas', [NaturezaController::class, 'index'])->name('naturezas.index');
 
         // Indicador Pessoal — rotas específicas antes do resource para evitar conflito com {id}
         Route::get('indicador-pessoal/busca', [IndicadorPessoalController::class, 'busca'])->name('indicador-pessoal.busca');
@@ -63,6 +72,28 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('transacoes', TransacaoController::class)->only([
             'index', 'store', 'show', 'update', 'destroy',
         ]);
+
+        // Protocolo
+        Route::prefix('protocolo')->name('protocolo.')->group(function () {
+            Route::get('/',          [ProtocoloController::class, 'listar'])->name('listar');
+            Route::post('/',         [ProtocoloController::class, 'criar'])->name('criar');
+            Route::get('/{id}',      [ProtocoloController::class, 'exibir'])->name('exibir');
+            Route::put('/{id}',      [ProtocoloController::class, 'atualizar'])->name('atualizar');
+            Route::post('/{id}/cancelar',    [ProtocoloController::class, 'cancelar'])->name('cancelar');
+            Route::post('/{id}/recalcular',  [ProtocoloController::class, 'recalcular'])->name('recalcular');
+            Route::post('/{id}/item',        [ProtocoloController::class, 'adicionarItem'])->name('item.adicionar');
+            Route::delete('/{id}/item/{itemId}', [ProtocoloController::class, 'removerItem'])->name('item.remover');
+
+            // Pagamentos
+            Route::get('/{id}/pagamento',                  [ProtocoloPagamentoController::class, 'listar'])->name('pagamento.listar');
+            Route::post('/{id}/pagamento',                 [ProtocoloPagamentoController::class, 'registrar'])->name('pagamento.registrar');
+            Route::post('/{id}/pagamento/{pagId}/estornar', [ProtocoloPagamentoController::class, 'estornar'])->name('pagamento.estornar');
+            Route::delete('/{id}/pagamento/{pagId}',       [ProtocoloPagamentoController::class, 'excluir'])->name('pagamento.excluir');
+
+            // Isenções
+            Route::get('/{id}/isencao',  [ProtocoloIsencaoController::class, 'listar'])->name('isencao.listar');
+            Route::post('/{id}/isencao', [ProtocoloIsencaoController::class, 'registrar'])->name('isencao.registrar');
+        });
     });
 
 });

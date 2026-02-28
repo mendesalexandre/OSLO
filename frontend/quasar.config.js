@@ -13,7 +13,7 @@ export default defineConfig((ctx) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
-    boot: ["pinia", "axios", "auth", "components"],
+    boot: ["pinia", "axios", "auth", "components", "permissao", "setDefaults"],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#css
     css: [

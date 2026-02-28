@@ -88,6 +88,10 @@ class AuthController extends Controller
             'email'         => $user->email,
             'is_ativo'      => $user->is_ativo,
             'data_cadastro' => $user->data_cadastro?->format('Y-m-d H:i:s'),
+            // RBAC — será preenchido quando o sistema de permissões for implementado
+            'permissoes'    => [],
+            'grupos'        => [],
+            'empresa'       => null,
         ];
     }
 }

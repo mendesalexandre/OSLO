@@ -27,6 +27,11 @@ class DatabaseSeeder extends Seeder
             PorteEmpresaSeeder::class,
         ]);
 
+        // Tabelas globais de sistema
+        $this->call([
+            EstadoSeeder::class,
+        ]);
+
         // Catálogos de transação (ordem importa: motivos dependem de tipos)
         $this->call([
             TipoTransacaoSeeder::class,
