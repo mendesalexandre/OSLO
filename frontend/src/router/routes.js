@@ -51,6 +51,19 @@ const routes = [
   },
 
   {
+    path: '/transacoes',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'transacoes.lista',
+        component: () => import('pages/transacao/ListaPage.vue'),
+        meta: { title: 'Transações' },
+      },
+    ],
+  },
+
+  {
     path: '/consulta',
     component: () => import('layouts/MainLayout.vue'),
     children: [

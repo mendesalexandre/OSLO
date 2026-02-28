@@ -26,5 +26,12 @@ class DatabaseSeeder extends Seeder
             TipoEmpresaSeeder::class,
             PorteEmpresaSeeder::class,
         ]);
+
+        // Catálogos de transação (ordem importa: motivos dependem de tipos)
+        $this->call([
+            TipoTransacaoSeeder::class,
+            MotivoTransacaoSeeder::class,
+            BancoSeeder::class,
+        ]);
     }
 }

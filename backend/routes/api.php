@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuxiliarController;
+use App\Http\Controllers\BancoController;
 use App\Http\Controllers\IndicadorPessoalController;
 use App\Http\Controllers\IndisponibilidadeController;
+use App\Http\Controllers\TipoTransacaoController;
+use App\Http\Controllers\TransacaoController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -41,6 +44,18 @@ Route::prefix('v1')->group(function () {
         Route::get('indisponibilidades/cpf-cnpj/{cpfCnpj}', [IndisponibilidadeController::class, 'porCpfCnpj'])->name('indisponibilidades.por-cpf-cnpj');
         Route::post('indisponibilidades/{id}/cancelar', [IndisponibilidadeController::class, 'cancelar'])->name('indisponibilidades.cancelar');
         Route::apiResource('indisponibilidades', IndisponibilidadeController::class)->only([
+            'index', 'store', 'show', 'update', 'destroy',
+        ]);
+
+        // Catálogos de transação (Phase 06)
+        Route::get('tipos-transacao', [TipoTransacaoController::class, 'index'])->name('tipos-transacao.index');
+        Route::get('tipos-transacao/{tipo}/motivos', [TipoTransacaoController::class, 'porTipo'])->name('tipos-transacao.por-tipo');
+        Route::get('bancos', [BancoController::class, 'index'])->name('bancos.index');
+
+        // Transações (Phase 07)
+        Route::get('transacoes/resumo', [TransacaoController::class, 'resumo'])->name('transacoes.resumo');
+        Route::post('transacoes/{id}/confirmar', [TransacaoController::class, 'confirmar'])->name('transacoes.confirmar');
+        Route::apiResource('transacoes', TransacaoController::class)->only([
             'index', 'store', 'show', 'update', 'destroy',
         ]);
     });

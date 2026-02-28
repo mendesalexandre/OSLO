@@ -7,44 +7,36 @@
   >
     <div class="q-gutter-md">
 
-      <!-- Tipo -->
+      <!-- Indicador Pessoal -->
       <div>
-        <v-label label="Tipo *" />
-        <q-btn-toggle
-          v-model="form.tipo"
-          :options="tiposOpcoes"
-          spread unelevated
-          class="tipo-toggle"
+        <v-label label="Indicador Pessoal *" />
+        <busca-autocomplete
+          v-model="form.indicador_pessoal_id"
+          outlined dense
+          label="Buscar por nome ou CPF/CNPJ..."
+          :rules="[v => !!v || 'Obrigatório']"
         />
       </div>
 
-      <!-- Caixa -->
+      <!-- Tipo de Transação -->
       <div>
-        <v-label label="Caixa *" />
-        <q-select
-          v-model="form.caixa_id"
-          :options="caixaStore.caixas"
-          option-value="id"
-          option-label="nome"
-          emit-value map-options
+        <v-label label="Tipo de Transação *" />
+        <select-tipo-transacao
+          v-model="form.tipo_transacao_id"
           outlined dense
+          label="Selecionar tipo..."
           :rules="[v => !!v || 'Obrigatório']"
-        >
-          <template #prepend><l-icon name="wallet" :size="14" /></template>
-        </q-select>
+        />
       </div>
 
-      <!-- Natureza -->
+      <!-- Motivo -->
       <div>
-        <v-label label="Natureza *" />
-        <q-select
-          v-model="form.natureza"
-          :options="naturezasDisponiveis"
-          option-value="value"
-          option-label="label"
-          emit-value map-options
+        <v-label label="Motivo" />
+        <select-motivo-transacao
+          v-model="form.motivo_transacao_id"
+          :tipo-transacao-id="form.tipo_transacao_id"
           outlined dense
-          :rules="[v => !!v || 'Obrigatório']"
+          label="Selecionar motivo..."
         />
       </div>
 
@@ -64,16 +56,16 @@
         <v-money v-model.number="form.valor" outlined dense />
       </div>
 
-      <!-- Data vencimento -->
+      <!-- Data da Transação -->
       <div>
-        <v-label label="Data de Vencimento *" />
-        <v-date v-model="form.data_vencimento" outlined dense />
+        <v-label label="Data da Transação *" />
+        <v-date v-model="form.data_transacao" outlined dense />
       </div>
 
-      <!-- Observação -->
+      <!-- Observações -->
       <div>
-        <v-label label="Observação" />
-        <q-input v-model="form.observacao" outlined dense type="textarea" rows="2" autogrow />
+        <v-label label="Observações" />
+        <q-input v-model="form.observacoes" outlined dense type="textarea" rows="2" autogrow />
       </div>
 
     </div>
@@ -82,7 +74,7 @@
       <div class="row justify-end q-gutter-sm">
         <q-btn flat no-caps label="Cancelar" @click="model = false" />
         <q-btn unelevated color="primary" no-caps :loading="salvando" @click="salvar">
-          <l-icon name="save" :size="16" class="q-mr-sm" />
+          <q-icon name="save" size="16px" class="q-mr-sm" />
           Salvar
         </q-btn>
       </div>
@@ -91,10 +83,12 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useTransacaoStore } from 'src/stores/transacao'
-import { useCaixaStore } from 'src/stores/caixa'
+import BuscaAutocomplete from 'src/components/indicador-pessoal/BuscaAutocomplete.vue'
+import SelectTipoTransacao from './SelectTipoTransacao.vue'
+import SelectMotivoTransacao from './SelectMotivoTransacao.vue'
 
 defineOptions({ name: 'ModalTransacao' })
 
@@ -105,69 +99,35 @@ const props = defineProps({
 const emit = defineEmits(['salvo'])
 const model = defineModel({ default: false })
 
-const $q            = useQuasar()
+const $q             = useQuasar()
 const transacaoStore = useTransacaoStore()
-const caixaStore    = useCaixaStore()
-const salvando      = ref(false)
-
-const tiposOpcoes = [
-  { label: 'Entrada', value: 'ENTRADA', color: 'positive' },
-  { label: 'Saída',   value: 'SAIDA',   color: 'negative' },
-]
-
-const naturezasPorTipo = {
-  ENTRADA: [
-    { value: 'CONTA_RECEBER', label: 'Conta a Receber' },
-    { value: 'REFORCO',       label: 'Reforço'         },
-    { value: 'AJUSTE',        label: 'Ajuste'          },
-    { value: 'TRANSFERENCIA', label: 'Transferência'   },
-  ],
-  SAIDA: [
-    { value: 'CONTA_PAGAR',   label: 'Conta a Pagar'  },
-    { value: 'SANGRIA',       label: 'Sangria'         },
-    { value: 'AJUSTE',        label: 'Ajuste'          },
-    { value: 'TRANSFERENCIA', label: 'Transferência'   },
-  ],
-}
-
-const naturezasDisponiveis = computed(() =>
-  naturezasPorTipo[form.value.tipo] ?? naturezasPorTipo.ENTRADA
-)
+const salvando       = ref(false)
 
 const hoje = new Date().toISOString().split('T')[0]
 
 const formVazio = () => ({
-  tipo:            'ENTRADA',
-  natureza:        'CONTA_RECEBER',
-  caixa_id:        null,
-  descricao:       '',
-  valor:           0,
-  data_vencimento: hoje,
-  observacao:      '',
+  indicador_pessoal_id: null,
+  tipo_transacao_id:    null,
+  motivo_transacao_id:  null,
+  descricao:            '',
+  valor:                0,
+  data_transacao:       hoje,
+  observacoes:          '',
 })
 
 const form = ref(formVazio())
 
-// Ajusta natureza quando muda o tipo
-watch(() => form.value.tipo, (novoTipo) => {
-  const opcoes = naturezasPorTipo[novoTipo]
-  if (!opcoes.find(o => o.value === form.value.natureza)) {
-    form.value.natureza = opcoes[0].value
-  }
-})
-
-watch(model, async (aberto) => {
+watch(model, (aberto) => {
   if (aberto) {
-    await caixaStore.listar()
     form.value = props.transacao
       ? {
-          tipo:            props.transacao.tipo,
-          natureza:        props.transacao.natureza,
-          caixa_id:        props.transacao.caixa_id,
-          descricao:       props.transacao.descricao,
-          valor:           props.transacao.valor,
-          data_vencimento: props.transacao.data_vencimento,
-          observacao:      props.transacao.observacao ?? '',
+          indicador_pessoal_id: props.transacao.indicador_pessoal_id,
+          tipo_transacao_id:    props.transacao.tipo_transacao_id,
+          motivo_transacao_id:  props.transacao.motivo_transacao_id ?? null,
+          descricao:            props.transacao.descricao,
+          valor:                props.transacao.valor,
+          data_transacao:       props.transacao.data_transacao,
+          observacoes:          props.transacao.observacoes ?? '',
         }
       : formVazio()
   }
@@ -190,18 +150,10 @@ const salvar = async () => {
       type: 'negative',
       message: 'Erro ao salvar transação',
       caption: e.response?.data?.mensagem ?? e.response?.data?.message,
+      position: 'top',
     })
   } finally {
     salvando.value = false
   }
 }
 </script>
-
-<style scoped lang="scss">
-.tipo-toggle {
-  :deep(.q-btn) {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm) !important;
-  }
-}
-</style>
