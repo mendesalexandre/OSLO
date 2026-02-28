@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuxiliarController;
 use App\Http\Controllers\BancoController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndicadorPessoalController;
 use App\Http\Controllers\IndisponibilidadeController;
 use App\Http\Controllers\TipoTransacaoController;
@@ -46,6 +47,10 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('indisponibilidades', IndisponibilidadeController::class)->only([
             'index', 'store', 'show', 'update', 'destroy',
         ]);
+
+        // Dashboard (Phase 08)
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('dashboard/eventos', [DashboardController::class, 'eventosPorMes'])->name('dashboard.eventos');
 
         // Catálogos de transação (Phase 06)
         Route::get('tipos-transacao', [TipoTransacaoController::class, 'index'])->name('tipos-transacao.index');

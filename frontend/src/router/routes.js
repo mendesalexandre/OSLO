@@ -5,9 +5,9 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'home',
-        component: () => import('pages/IndexPage.vue'),
-        meta: { title: 'Início', publico: false },
+        name: 'dashboard',
+        component: () => import('pages/DashboardPage.vue'),
+        meta: { title: 'Dashboard', publico: false },
       },
     ],
   },
