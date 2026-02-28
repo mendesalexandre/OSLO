@@ -28,7 +28,7 @@ return new class extends Migration
             CREATE OR REPLACE FUNCTION fn_natureza_uuid()
             RETURNS TRIGGER AS \$\$
             BEGIN
-                IF NEW.uuid IS NULL OR NEW.uuid = '' THEN
+                IF NEW.uuid IS NULL THEN
                     NEW.uuid = gen_random_uuid();
                 END IF;
                 RETURN NEW;

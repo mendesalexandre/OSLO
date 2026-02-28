@@ -87,6 +87,37 @@ const routes = [
         component: () => import('pages/protocolo/ListaPage.vue'),
         meta: { title: 'Protocolos', permissao: ['PROTOCOLO_LISTAR'] },
       },
+      {
+        path: ':id',
+        component: () => import('pages/protocolo/DetalhePage.vue'),
+        meta: { title: 'Protocolo', permissao: ['PROTOCOLO_VISUALIZAR'] },
+        children: [
+          {
+            path: '',
+            name: 'protocolo.geral',
+            component: () => import('src/components/protocolo/ProtocoloInfoTab.vue'),
+            meta: { title: 'Protocolo — Geral' },
+          },
+          {
+            path: 'atos',
+            name: 'protocolo.atos',
+            component: () => import('src/components/protocolo/ProtocoloAtosTab.vue'),
+            meta: { title: 'Protocolo — Atos' },
+          },
+          {
+            path: 'financeiro',
+            name: 'protocolo.financeiro',
+            component: () => import('src/components/protocolo/ProtocoloFinanceiroTab.vue'),
+            meta: { title: 'Protocolo — Financeiro' },
+          },
+          {
+            path: 'anotacoes',
+            name: 'protocolo.anotacoes',
+            component: () => import('src/components/protocolo/ProtocoloAnotacoesTab.vue'),
+            meta: { title: 'Protocolo — Anotações' },
+          },
+        ],
+      },
     ],
   },
 

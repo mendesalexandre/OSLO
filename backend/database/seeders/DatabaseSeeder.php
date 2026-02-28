@@ -38,5 +38,10 @@ class DatabaseSeeder extends Seeder
             MotivoTransacaoSeeder::class,
             BancoSeeder::class,
         ]);
+
+        // Protocolos de exemplo
+        $this->call([
+            ProtocoloSeeder::class,
+        ]);
     }
 }

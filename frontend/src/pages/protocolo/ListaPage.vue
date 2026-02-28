@@ -267,7 +267,7 @@ const abrirCriar  = () => { modalCriar.value = true }
 const onCriado    = () => { modalCriar.value = false; carregarLista() }
 
 const abrirDetalhe = (row) => {
-  router.push({ name: 'protocolo.lista' }) // placeholder — será protocolo.detalhe quando existir
+  router.push({ name: 'protocolo.geral', params: { id: row.id } })
 }
 
 onMounted(carregarLista)
