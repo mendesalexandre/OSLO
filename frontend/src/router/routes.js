@@ -231,6 +231,12 @@ const routes = [
         meta: { title: 'Meios de Pagamento', permissao: ['MEIO_PAGAMENTO_LISTAR'] },
       },
       {
+        path: 'natureza',
+        name: 'administracao.natureza',
+        component: () => import('pages/administracao/NaturezaPage.vue'),
+        meta: { title: 'Naturezas', permissao: ['NATUREZA_LISTAR'] },
+      },
+      {
         path: 'categoria',
         name: 'administracao.categoria',
         component: () => import('pages/administracao/CategoriaPage.vue'),

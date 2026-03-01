@@ -43,7 +43,9 @@ Route::prefix('v1')->group(function () {
 
         // Tabelas globais de sistema
         Route::get('estados', [EstadoController::class, 'index'])->name('estados.index');
-        Route::get('naturezas', [NaturezaController::class, 'index'])->name('naturezas.index');
+        Route::apiResource('naturezas', NaturezaController::class)->only([
+            'index', 'store', 'show', 'update', 'destroy',
+        ]);
 
         // Indicador Pessoal — rotas específicas antes do resource para evitar conflito com {id}
         Route::get('indicador-pessoal/busca', [IndicadorPessoalController::class, 'busca'])->name('indicador-pessoal.busca');

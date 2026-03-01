@@ -49,7 +49,7 @@ const menus = [
   {
     title: 'Cartório',
     children: [
-      { label: 'Naturezas',           icon: 'list',         to: { name: 'tarefas' },                                    permissao: 'NATUREZA_LISTAR'     },
+      { label: 'Naturezas',           icon: 'list',         to: { name: 'administracao.natureza' },                     permissao: 'NATUREZA_LISTAR'     },
       { label: 'Tabelas de Custas',   icon: 'table-2',      to: { name: 'tarefas' },                                    permissao: 'TABELA_CUSTA_LISTAR' },
       { label: 'Domínios',            icon: 'layers',       to: { name: 'tarefas' },                                    permissao: 'DOMINIO_LISTAR'      },
       { label: 'Feriados',            icon: 'calendar',     to: { name: 'tarefas' },                                    permissao: 'FERIADO_LISTAR'      },
