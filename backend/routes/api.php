@@ -7,15 +7,18 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\FormaPagamentoController;
+use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\IndicadorPessoalController;
 use App\Http\Controllers\IndisponibilidadeController;
 use App\Http\Controllers\MeioPagamentoController;
 use App\Http\Controllers\NaturezaController;
+use App\Http\Controllers\PermissaoController;
 use App\Http\Controllers\ProtocoloController;
 use App\Http\Controllers\ProtocoloIsencaoController;
 use App\Http\Controllers\ProtocoloPagamentoController;
 use App\Http\Controllers\TipoTransacaoController;
 use App\Http\Controllers\TransacaoController;
+use App\Http\Controllers\UsuarioPermissaoController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -91,6 +94,21 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('categorias', CategoriaController::class)->only([
             'index', 'store', 'show', 'update', 'destroy',
         ]);
+
+        // Administração — RBAC
+        Route::post('grupos/{id}/permissoes', [GrupoController::class, 'sincronizarPermissoes'])->name('grupos.permissoes');
+        Route::apiResource('grupos', GrupoController::class)->only([
+            'index', 'store', 'show', 'update', 'destroy',
+        ]);
+
+        Route::get('permissoes/modulos', [PermissaoController::class, 'modulos'])->name('permissoes.modulos');
+        Route::get('permissoes', [PermissaoController::class, 'index'])->name('permissoes.index');
+
+        Route::get('usuarios-permissoes', [UsuarioPermissaoController::class, 'index'])->name('usuarios-permissoes.index');
+        Route::get('usuarios-permissoes/{id}', [UsuarioPermissaoController::class, 'show'])->name('usuarios-permissoes.show');
+        Route::get('usuarios-permissoes/{id}/efetivas', [UsuarioPermissaoController::class, 'efetivas'])->name('usuarios-permissoes.efetivas');
+        Route::post('usuarios-permissoes/{id}/grupos', [UsuarioPermissaoController::class, 'sincronizarGrupos'])->name('usuarios-permissoes.grupos');
+        Route::post('usuarios-permissoes/{id}/permissao', [UsuarioPermissaoController::class, 'definirPermissao'])->name('usuarios-permissoes.permissao');
 
         // Protocolo
         Route::prefix('protocolo')->name('protocolo.')->group(function () {

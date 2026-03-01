@@ -43,5 +43,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProtocoloSeeder::class,
         ]);
+
+        // RBAC — permissões e grupos (após criar usuário admin)
+        $this->call([
+            PermissaoSeeder::class,
+            GrupoSeeder::class,
+        ]);
     }
 }

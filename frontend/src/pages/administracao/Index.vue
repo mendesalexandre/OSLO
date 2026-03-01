@@ -68,10 +68,10 @@ const menus = [
   {
     title: 'Segurança & Acesso',
     children: [
-      { label: 'Grupos',     icon: 'users-round',    to: { name: 'tarefas' }, permissao: 'GRUPO_LISTAR'              },
-      { label: 'Permissões', icon: 'shield',         to: { name: 'tarefas' }, permissao: 'PERMISSAO_LISTAR'          },
-      { label: 'Usuários',   icon: 'user-cog',       to: { name: 'tarefas' }, permissao: 'USUARIO_PERMISSAO_LISTAR'  },
-      { label: 'Auditoria',  icon: 'clipboard-check', to: { name: 'tarefas' }, permissao: 'AUDITORIA_LISTAR'         },
+      { label: 'Grupos',     icon: 'users-round',    to: { name: 'administracao.grupos' },              permissao: 'GRUPO_LISTAR'             },
+      { label: 'Permissões', icon: 'shield',         to: { name: 'administracao.permissoes' },          permissao: 'PERMISSAO_LISTAR'         },
+      { label: 'Usuários',   icon: 'user-cog',       to: { name: 'administracao.usuarios-permissoes' }, permissao: 'USUARIO_PERMISSAO_LISTAR' },
+      { label: 'Auditoria',  icon: 'clipboard-check', to: { name: 'tarefas' },                          permissao: 'AUDITORIA_LISTAR'         },
     ],
   },
   {

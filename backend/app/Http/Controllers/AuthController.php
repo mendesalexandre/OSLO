@@ -82,15 +82,16 @@ class AuthController extends Controller
      */
     private function dadosUsuario(User $user): array
     {
+        $user->load(['grupos', 'grupos.permissoes', 'permissoesIndividuais']);
+
         return [
             'id'            => $user->id,
             'nome'          => $user->nome,
             'email'         => $user->email,
             'is_ativo'      => $user->is_ativo,
             'data_cadastro' => $user->data_cadastro?->format('Y-m-d H:i:s'),
-            // RBAC — será preenchido quando o sistema de permissões for implementado
-            'permissoes'    => [],
-            'grupos'        => [],
+            'permissoes'    => $user->obterPermissoes(),
+            'grupos'        => $user->grupos->pluck('nome')->toArray(),
             'empresa'       => null,
         ];
     }

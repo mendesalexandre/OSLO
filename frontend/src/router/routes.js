@@ -242,6 +242,24 @@ const routes = [
         component: () => import('pages/administracao/CategoriaPage.vue'),
         meta: { title: 'Categorias', permissao: ['CATEGORIA_LISTAR'] },
       },
+      {
+        path: 'grupos',
+        name: 'administracao.grupos',
+        component: () => import('pages/administracao/GruposPage.vue'),
+        meta: { title: 'Grupos', permissao: ['GRUPO_LISTAR'] },
+      },
+      {
+        path: 'permissoes',
+        name: 'administracao.permissoes',
+        component: () => import('pages/administracao/PermissoesPage.vue'),
+        meta: { title: 'Permissões', permissao: ['PERMISSAO_LISTAR'] },
+      },
+      {
+        path: 'usuarios-permissoes',
+        name: 'administracao.usuarios-permissoes',
+        component: () => import('pages/administracao/UsuariosPermissoesPage.vue'),
+        meta: { title: 'Usuários e Permissões', permissao: ['USUARIO_PERMISSAO_LISTAR'] },
+      },
     ],
   },
 
