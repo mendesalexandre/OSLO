@@ -1,74 +1,187 @@
 # OSLO — Open Source Registry Office Management System
 
-> Sistema open source de gestão cartorária para o Brasil.
-> Feito para os cartórios que ninguém vê — os pequenos, os remotos, os que mais precisam.
+> The first and only open-source registry office (_cartório_) management system for Brazil.
+> Built for the offices no one sees — the small ones, the remote ones, the ones that need it most.
 
 <p align="center">
-  <strong>Português</strong> · <a href="#english">English</a>
+  <a href="#português">Português</a> · <strong>English</strong>
 </p>
 
 ---
 
-## O Problema
+## The Problem
 
-O Brasil possui mais de **13.000 cartórios extrajudiciais** que atendem 215 milhões de pessoas em cada momento importante da vida: nascimento, casamento, compra de imóvel, óbito. São infraestrutura pública essencial.
+Brazil has over **13,000 registry offices** (_cartórios_) serving **215 million people** across **8.5 million km²** of territory — larger than the contiguous United States.
 
-Mas a realidade dos cartórios pequenos — especialmente em municípios do interior, áreas rurais e regiões remotas da Amazônia, do sertão e do cerrado — é dura:
+To understand what a _cartório_ does, consider that a single Brazilian registry office combines the functions that are spread across **multiple separate institutions** in the US and Europe:
 
-- **Sistemas proprietários caros** que consomem boa parte da receita de uma serventia pequena
-- **Dependência de internet estável** que simplesmente não existe em muitas localidades
-- **Suporte técnico distante** — quando o sistema trava, não há técnico a 800 km de distância
-- **Nenhuma alternativa open source** — até agora
+| Function | Brazil (Cartório) | United States | Europe |
+|---|---|---|---|
+| Birth / marriage / death records | Civil Registry | County Clerk, Vital Records Office | _Standesamt_ (DE), _État civil_ (FR), _Registro Civil_ (ES) |
+| Property registration | Real Estate Registry | County Recorder, Title Companies | _Grundbuchamt_ (DE), _Cadastre_ (FR), HM Land Registry (UK) |
+| Notarial services | Notary Office | Notary Public (minimal role) | _Notar_ (DE), _Notaire_ (FR) |
+| Document authentication | Registry of Titles & Docs | Notary Public, Secretary of State | Notary, _Apostille_ authorities |
+| Protest of bills | Protest Registry | No equivalent (courts) | _Huissier de justice_ (FR) |
+| Legal entity registration | RTDPJ | Secretary of State | Chamber of Commerce |
 
-Esses cartórios atendem comunidades inteiras que dependem deles para registrar filhos, formalizar uniões, transferir propriedades. Quando o cartório não funciona, a vida civil dessas pessoas para.
+**You do not legally exist in Brazil without a cartório.** No birth certificate means no ID card, no school enrollment, no healthcare, no government benefits. No property registration means no legal proof of ownership. No death certificate means frozen bank accounts and unsettled estates.
 
-## A Solução
+### The Scale Challenge
 
-O **OSLO** é o primeiro e único sistema open source completo de gestão cartorária para o Brasil.
+What makes Brazil fundamentally different from the US or Europe is **continental scale combined with extreme inequality**:
 
-Foi pensado desde o início para funcionar onde as condições são difíceis:
+- The **Amazon region alone** is larger than all of Western Europe — towns separated by hundreds of kilometers of river, no roads, often just satellite internet
+- In the **sertão** (semi-arid northeast), small towns of 5,000–10,000 people depend on a single registry office — the only point of legal documentation access within 100+ km
+- Germany has ~7,500 notary offices serving 84 million people with excellent digital infrastructure. Brazil has **13,000+ offices** serving **215 million**, many with **unreliable electricity, let alone internet**
+- Brazilian _cartórios_ are **privately operated under government concession** — each office must fund its own technology. A small office earning R$5,000–10,000/month (~$1,000–2,000 USD) cannot afford proprietary software that costs R$2,000–5,000/month
 
-- **Arquitetura offline-first** planejada — para funcionar mesmo com internet intermitente
-- **Leve e eficiente** — roda em hardware modesto, sem exigir infraestrutura cara
-- **Sem licença, sem mensalidade** — o cartório instala, usa e adapta como precisar
-- **Código aberto e auditável** — transparência total para um serviço que é público por natureza
-- **Multi-tenant** — um único servidor pode atender vários cartórios com isolamento completo de dados
-
-### Funcionalidades
-
-- **Gestão de protocolos** com workflow completo (Atendimento → Distribuição → Análise → Registro → Concluído)
-- **Cálculo automático de emolumentos** conforme tabela de custas estadual, com suporte a cálculo fixo, faixa progressiva e gratuidade
-- **Sistema financeiro integrado** — caixa, transações, formas e meios de pagamento
-- **Indicador Pessoal** — cadastro completo de pessoas físicas e jurídicas com versionamento
-- **Indisponibilidade de bens** — consulta e vinculação a indicadores pessoais
-- **RBAC granular** — ~138 permissões organizadas por módulo (Protocolo, Contrato, Financeiro, Caixa, Administração)
-- **Auditoria completa** via triggers PostgreSQL — cada operação é rastreável
-- **Assinatura digital** via ICP-Brasil (Lacuna/RestPKI)
-- **Integração com serviços públicos** — Receita Federal (DOI/RFB), BrasilAPI (CNPJ)
+**The result:** thousands of offices serving millions of citizens either use outdated systems, manual paper processes, or cobble together spreadsheets — in 2026.
 
 ---
 
-## Stack Técnica
+## The Solution
 
-| Camada | Tecnologia |
+**OSLO** is the first and only open-source complete registry office management system for Brazil. It was designed from the ground up for the reality of small, remote offices:
+
+- **Zero licensing cost** — install, use, and adapt freely. No monthly fees
+- **Lightweight** — runs on modest hardware without expensive infrastructure
+- **Offline-first architecture** planned — for offices with intermittent or no internet
+- **Open source and auditable** — full transparency for a service that is public by nature
+- **Multi-tenant** — a single server can serve multiple offices with complete data isolation
+
+---
+
+## Features
+
+### Protocol Management
+
+Complete workflow with state machine: **Reception → Distribution → Analysis → Registration → Completed**, with branches for Requirements and Cancellation. Every transition is recorded in the protocol history with timestamp, user, and notes.
+
+### Fee Calculation Engine (Emolumentos)
+
+Automated calculation based on state-regulated fee tables:
+
+- **Fixed** — flat fee per act × quantity
+- **Progressive bracket** — base fee + incremental charges based on property/transaction value, with ceiling caps
+- **Free-of-charge** (_Gratuidade_) — for low-income citizens (see below)
+
+Currently supporting **Mato Grosso 2025** fee table with 4 tax layers applied in order (Registro Civil, FUNAJURIS, FUNAMP, ISSQN). Designed to scale to all 27 Brazilian states.
+
+### Free Document Issuance for Low-Income Citizens
+
+Brazilian law (Lei 9.534/97 and the Federal Constitution) guarantees that **low-income citizens** have the right to free birth certificates, death certificates, marriage certificates, and copies needed for government benefits.
+
+OSLO enforces this constitutional right by:
+- Tracking which documents qualify for fee exemption based on legal criteria
+- Recording exemption reasons for audit and reporting to the state oversight body (_corregedoria_)
+- Calculating the fee that _would have been charged_ for compensation fund reporting
+- Generating reports for the _Fundo de Compensação_ that partially reimburses offices
+
+Without proper software, small offices either **fail to track free services** (losing compensation they're entitled to) or **incorrectly charge citizens** who should be exempt.
+
+### Personal Index (Indicador Pessoal)
+
+Complete registration of individuals (CPF) and legal entities (CNPJ) with:
+- Full versioning — every change creates a new version, preserving history
+- CPF/CNPJ validation with mathematical algorithms and real-time status check against the Federal Revenue Service
+- Partner/associate tracking for legal entities
+- Conditional validation based on person type (married, incapacitated, minor)
+
+### Asset Unavailability (Indisponibilidade de Bens)
+
+Before any property transfer, a registry office **must verify** whether the seller's assets are under judicial restriction (court-ordered liens, tax enforcement, criminal proceedings). Failing to do so means:
+- **Void transactions** — the sale is legally null
+- **Personal liability** — the registrar is personally liable
+- **Criminal prosecution** — in cases of negligence
+
+OSLO cross-references every party in a property transaction against unavailability records and **alerts the clerk before any registration proceeds**. This is the equivalent of a US title search checking for liens and encumbrances — except in Brazil, the registry office itself is legally responsible, not a separate title company.
+
+### Financial Module
+
+Full cashier and transaction management:
+- Cash register operations (open, close, withdraw, verify)
+- Transaction tracking with audit trail (every insert, update, delete recorded)
+- Materialized views for real-time financial summaries
+- Multiple payment methods and types
+
+### RBAC (Role-Based Access Control)
+
+~138 granular permissions organized by module:
+
+| Module | Permissions |
+|---|---|
+| Protocol | list, create, view, edit, cancel, pay, reverse, exempt |
+| Contract | list, create, view, edit, complete, cancel |
+| Financial | forms, methods, transactions — full CRUD |
+| Cashier | open, close, verify, withdraw, movements |
+| Administration | domains, natures, states, cities — full CRUD |
+
+Default groups: **Administrator** (full bypass), **Registrar** (full operational), **Clerk** (protocols and contracts), **Cashier** (financial), **Read-only** (view only).
+
+### Auditing
+
+PostgreSQL trigger-based auditing in a dedicated `auditoria` schema. Every INSERT, UPDATE, and DELETE across all tables is recorded with:
+- User ID, IP address, user agent
+- Full before/after state of the record
+- Timestamp with timezone
+
+This is **compliance-grade auditing** — required by Brazilian registry regulations and enforced at the database level, not the application level.
+
+### Digital Signatures
+
+Integration with **ICP-Brasil** (Brazil's national PKI) via Lacuna/RestPKI for legally valid digital signatures on documents and certificates.
+
+---
+
+## Government Integrations
+
+OSLO integrates with Brazil's national civil registry infrastructure, transforming isolated offices into connected nodes of the national identity system.
+
+| Integration | Description | Status |
+|---|---|---|
+| **DOI / Receita Federal** | Mandatory declaration of real estate transactions to the Federal Revenue Service — reports parties (CPF/CNPJ), property values, and tax assessments for every property transfer | **Active** |
+| **BrasilAPI (CNPJ)** | Real-time CNPJ lookup — company name, address, legal nature, partners | **Active** |
+| **CPF Validation** | Real-time verification of CPF status (active, suspended, deceased, cancelled) against the Federal Revenue Service | **Active** |
+| **ICP-Brasil** | National PKI for digital signatures with full legal validity via Lacuna/RestPKI | **Active** |
+| **CNIB** | _Central Nacional de Indisponibilidade de Bens_ — national database of court-ordered asset freezes | **Integrated (local)** |
+| **CEI/MT** | Mato Grosso state electronic integration hub for inter-office communication | Planned |
+| **RTDPJ** | National registry for legal entity documents and titles | Planned |
+| **NEXTYR** | Modern court-registry integration platform | Planned |
+| **e-SAJ / CNJ** | Judiciary case management — court orders, liens, judicial communications | Planned |
+| **SINTER** | National land information system linking property registries with tax authorities | Planned |
+| **ONR** | National electronic platform for remote registry service requests | Planned |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
 |---|---|
 | Backend | Laravel 12 · PHP 8.4+ · PostgreSQL · Redis |
 | Frontend | Vue 3.4 · Quasar 2.18 · Pinia 3 · Axios |
-| Autenticação | Laravel Sanctum (cookies HttpOnly, stateful) |
-| PDF | mPDF 8 + wkhtmltopdf (Snappy) |
-| Filas | Redis (queues + sessions + cache) |
-| Assinatura Digital | Lacuna/RestPKI (ICP-Brasil) |
+| Authentication | Laravel Sanctum (HttpOnly cookies, stateful sessions) |
+| PDF Generation | mPDF 8 + wkhtmltopdf (Snappy) |
+| Queue / Cache | Redis |
+| Digital Signatures | Lacuna/RestPKI (ICP-Brasil) |
 
-**Monorepo** — backend e frontend no mesmo repositório para simplificar deploy e contribuição.
+**Monorepo** — backend and frontend in the same repository for simpler deployment and contribution.
+
+### Maturity Indicators
+
+- **82 passing tests** (Pest/PHPUnit) covering auth, RBAC, CRUD, and business logic
+- **138 RBAC permissions** implemented across all modules
+- **PostgreSQL trigger-based auditing** at the database level
+- **Idempotent seeders** with real regulatory data (MT 2025 fee tables, tax rates, legal act definitions)
+- **Typed enums**, reusable traits, consistent coding patterns
+- **Comprehensive technical documentation** (CLAUDE.md, MULTI_TENANCY.md, project phases)
 
 ---
 
-## Instalação Rápida
+## Quick Start
 
-### Pré-requisitos
+### Prerequisites
 
-- PHP 8.4+
-- Composer
+- PHP 8.4+, Composer
 - Node.js 18+
 - PostgreSQL 15+
 - Redis
@@ -81,7 +194,7 @@ composer install
 cp .env.example .env
 php artisan key:generate
 
-# Configurar banco de dados no .env
+# Configure database credentials in .env
 php artisan migrate --seed
 
 php artisan serve --port=8000
@@ -93,129 +206,183 @@ php artisan serve --port=8000
 cd frontend
 npm install
 
-# Configurar API_URL no .env (ex: http://localhost:8000/api)
+# Configure API_URL in .env (e.g., http://localhost:8000/api)
 npx quasar dev
 ```
 
-O frontend estará disponível em `http://localhost:9000`.
+The frontend will be available at `http://localhost:9000`.
 
 ---
 
-## Estrutura do Projeto
+## Project Structure
 
 ```
 OSLO/
-├── backend/          → API Laravel
+├── backend/                → Laravel API
 │   ├── app/
-│   │   ├── Models/           → Eloquent models com traits (PertenceEmpresa, Auditavel)
-│   │   ├── Http/Controllers/ → Controllers com RespostaApi trait
-│   │   ├── Services/         → Lógica de negócio (cálculo de emolumentos, etc.)
-│   │   └── Traits/           → PertenceEmpresa, Auditavel, Arquivavel, RespostaApi
+│   │   ├── Models/             → Eloquent models with traits (PertenceEmpresa, Auditavel)
+│   │   ├── Http/Controllers/   → Controllers using RespostaApi trait
+│   │   ├── Services/           → Business logic (fee calculation, workflow, etc.)
+│   │   └── Traits/             → PertenceEmpresa, Auditavel, Arquivavel, RespostaApi
 │   ├── database/
-│   │   ├── migrations/       → Migrations PostgreSQL
-│   │   └── seeders/          → Seeders idempotentes com dados reais
-│   └── routes/api.php        → Rotas da API (/v1/...)
+│   │   ├── migrations/         → PostgreSQL migrations
+│   │   └── seeders/            → Idempotent seeders with real regulatory data
+│   └── routes/api.php          → API routes (/v1/...)
 │
-├── frontend/         → App Vue/Quasar
+├── frontend/               → Vue/Quasar SPA
 │   └── src/
-│       ├── pages/            → Páginas organizadas por módulo
-│       ├── components/       → Componentes reutilizáveis
-│       ├── stores/           → Stores Pinia (toda chamada API passa por aqui)
-│       ├── composables/      → usePermissao, etc.
-│       └── router/routes.js  → Rotas do frontend
+│       ├── pages/              → Pages organized by module
+│       ├── components/         → Reusable components
+│       ├── stores/             → Pinia stores (all API calls go through stores)
+│       ├── composables/        → usePermissao, etc.
+│       └── router/routes.js    → Frontend routes
 │
-└── docs/             → Documentação do projeto
+└── docs/                   → Project documentation
 ```
 
 ---
 
 ## Roadmap
 
-### Concluído
+### Completed
 
-- [x] Autenticação Sanctum (stateful, HttpOnly cookies)
-- [x] Tabelas auxiliares (estado civil, regime de bens, nacionalidade, etc.)
-- [x] Indicador Pessoal com versionamento
-- [x] Indisponibilidade de bens
-- [x] Catálogos de transação (tipos, motivos, bancos)
-- [x] Transações com auditoria
-- [x] Sistema RBAC completo (grupos, permissões, usuários)
-- [x] Interface de administração
+- [x] Sanctum authentication (stateful, HttpOnly cookies)
+- [x] Auxiliary tables (marital status, property regime, nationality, profession, etc.)
+- [x] Personal Index with full versioning
+- [x] Asset unavailability tracking
+- [x] Transaction catalogs (types, reasons, banks)
+- [x] Transactions with audit trail
+- [x] Complete RBAC system (groups, permissions, users)
+- [x] Administration interface
+- [x] Federal Revenue Service integration (DOI/RFB)
+- [x] CPF/CNPJ validation and lookup
 
-### Em desenvolvimento
+### In Development
 
-- [ ] Módulo de protocolo completo (workflow de etapas)
-- [ ] Cálculo de emolumentos por estado (atualmente MT 2025)
-- [ ] Módulo de caixa (abertura, fechamento, sangria, conferência)
-- [ ] Geração de recibos e certidões em PDF
+- [ ] Complete protocol module (full workflow with state machine)
+- [ ] Fee calculation by state (currently MT 2025)
+- [ ] Cashier module (open, close, withdraw, verify)
+- [ ] PDF generation for receipts and certificates
 
-### Planejado
+### Planned
 
-- [ ] Modo offline com sincronização
-- [ ] Tabelas de custas de todos os 27 estados
-- [ ] Integrações: CEI/MT, RTDPJ, NEXTYR, e-SAJ/CNJ
-- [ ] App mobile para atendimento em campo
-- [ ] Documentação de API completa (OpenAPI/Swagger)
-
----
-
-## Contribuindo
-
-Contribuições são bem-vindas! Este projeto existe para servir cartórios que não têm alternativas.
-
-### Como contribuir
-
-1. Faça um fork do repositório
-2. Crie uma branch para sua feature (`git checkout -b feature/minha-feature`)
-3. Commit suas mudanças (`git commit -m 'feat: descrição da mudança'`)
-4. Push para a branch (`git push origin feature/minha-feature`)
-5. Abra um Pull Request
-
-### Áreas que precisam de ajuda
-
-- **Tabelas de custas estaduais** — Se você conhece a legislação de emolumentos do seu estado, sua ajuda é valiosa
-- **Testes** — Aumentar cobertura de testes automatizados
-- **Documentação** — Guias de instalação, uso e contribuição
-- **UI/UX** — Melhorar a interface para usuários não técnicos
-- **Modo offline** — Implementação de sincronização para áreas sem internet estável
+- [ ] Offline mode with background sync
+- [ ] Fee tables for all 27 Brazilian states
+- [ ] Government integrations: CEI/MT, RTDPJ, NEXTYR, e-SAJ/CNJ, SINTER, ONR
+- [ ] Mobile app for field operations
+- [ ] Complete API documentation (OpenAPI/Swagger)
+- [ ] Multi-language support
 
 ---
 
-## Licença
+## Contributing
 
-Este projeto é software livre distribuído sob a licença [MIT](LICENSE).
+Contributions are welcome. This project exists to serve registry offices that have no alternatives.
+
+### How to Contribute
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/my-feature`)
+3. Commit your changes (`git commit -m 'feat: description'`)
+4. Push to the branch (`git push origin feature/my-feature`)
+5. Open a Pull Request
+
+### Areas That Need Help
+
+- **State fee tables** — if you know the fee legislation for your Brazilian state, your help is invaluable
+- **Testing** — increase automated test coverage
+- **Documentation** — installation guides, usage tutorials, contribution guides
+- **UI/UX** — improve the interface for non-technical users
+- **Offline mode** — sync implementation for areas without stable internet
+- **Translations** — help translate the interface and documentation
 
 ---
 
-<a name="english"></a>
-
-## English
-
-### What is OSLO?
-
-OSLO is the **first and only open-source registry office management system for Brazil**. Brazilian registry offices (_cartórios_) handle every citizen's critical life documents — birth certificates, marriage records, property registration, death certificates — yet most run expensive proprietary software that small offices in remote areas simply cannot afford.
-
-Over 13,000 registry offices serve 215 million Brazilians. In rural and remote areas — the Amazon, the _sertão_, small towns hundreds of kilometers from the nearest city — these offices often struggle with unreliable internet, no local tech support, and software costs that eat into their limited revenue. **OSLO exists to change that.**
-
-### Key Features
-
-- **Complete protocol management** with state-machine workflow (Reception → Distribution → Analysis → Registration → Completed)
-- **Automated fee calculation** based on state-regulated fee tables (fixed, progressive bracket, and free-of-charge)
-- **Full financial module** — cashier, transactions, payment methods
-- **Granular RBAC** — ~138 permissions across all modules
-- **PostgreSQL trigger-based auditing** — complete traceability of every operation
-- **Multi-tenant SaaS architecture** — one server, multiple offices, fully isolated data
-- **Digital signatures** via ICP-Brasil (Lacuna/RestPKI)
-- **Government integrations** — Federal Revenue Service (DOI/RFB), BrasilAPI (CNPJ lookup)
-
-### Tech Stack
-
-Laravel 12 + PHP 8.4 + PostgreSQL + Redis (backend) · Vue 3.4 + Quasar 2.18 + Pinia (frontend) · Laravel Sanctum (auth) · Monorepo
-
-### Contributing
-
-Contributions are welcome. See the [Contributing](#contribuindo) section above. If you know Brazilian registry office regulations for your state, your help with fee tables is especially valuable.
-
-### License
+## License
 
 This project is free software distributed under the [MIT](LICENSE) license.
+
+---
+
+<a name="português"></a>
+
+## Português
+
+### O Problema
+
+O Brasil possui mais de **13.000 cartórios extrajudiciais** que atendem **215 milhões de pessoas** em um território de **8,5 milhões de km²** — maior que os Estados Unidos contíguos.
+
+Um único cartório brasileiro concentra funções que nos EUA estão espalhadas entre County Clerk, County Recorder, Title Companies, Notary Public e Secretary of State. Na Europa, o equivalente seria somar o _Standesamt_, o _Grundbuchamt_ e o _Notar_ da Alemanha, ou o _État civil_, _Cadastre_ e _Notaire_ da França.
+
+**Sem cartório, você não existe legalmente no Brasil.** Sem certidão de nascimento: sem RG, sem matrícula escolar, sem SUS, sem benefícios sociais. Sem registro de imóvel: sem prova de propriedade. Sem certidão de óbito: contas bancárias congeladas, heranças travadas, pensões pagas indevidamente.
+
+A realidade dos cartórios pequenos — no interior da Amazônia, no sertão nordestino, em municípios do cerrado — é brutal:
+
+- **Sistemas proprietários caros** (R$2.000–5.000/mês) que consomem a receita de serventias que faturam R$5.000–10.000/mês
+- **Internet inexistente ou intermitente** — cidades ligadas por rio, sem fibra óptica, dependendo de satélite
+- **Suporte técnico a 800 km de distância** — quando o sistema trava, não há técnico por perto
+- **Nenhuma alternativa open source** — até agora
+
+Enquanto isso, a Alemanha tem ~7.500 cartórios para 84 milhões de pessoas com infraestrutura digital excelente. O Brasil tem **13.000+ para 215 milhões**, muitos sem energia elétrica estável, quem dirá internet.
+
+**O resultado:** milhares de cartórios atendendo milhões de cidadãos com sistemas ultrapassados, processos em papel ou planilhas improvisadas — em 2026.
+
+### A Solução
+
+O **OSLO** é o primeiro e único sistema open source completo de gestão cartorária para o Brasil.
+
+- **Custo zero de licença** — instala, usa e adapta sem mensalidade
+- **Leve** — roda em hardware modesto
+- **Offline-first planejado** — para funcionar com internet intermitente
+- **Código aberto e auditável** — transparência para um serviço público por natureza
+- **Multi-tenant** — um servidor atende vários cartórios com isolamento total de dados
+
+### Funcionalidades Principais
+
+- **Gestão de protocolos** com workflow completo (Atendimento → Distribuição → Análise → Registro → Concluído)
+- **Cálculo automático de emolumentos** por tabela de custas estadual (fixo, faixa progressiva e gratuidade)
+- **Gratuidade constitucional** — rastreamento de isenções para cidadãos de baixa renda (Lei 9.534/97), com relatórios para o Fundo de Compensação
+- **Indicador Pessoal** — cadastro de pessoas físicas (CPF) e jurídicas (CNPJ) com versionamento completo
+- **Indisponibilidade de bens** — verificação obrigatória de restrições judiciais antes de qualquer transferência de imóvel
+- **Sistema financeiro integrado** — caixa, transações, formas e meios de pagamento, com auditoria em cada operação
+- **RBAC granular** — ~138 permissões organizadas por módulo
+- **Auditoria via triggers PostgreSQL** — cada INSERT, UPDATE e DELETE é registrado com usuário, IP e timestamp
+- **Assinatura digital ICP-Brasil** via Lacuna/RestPKI
+- **Integrações governamentais** — Receita Federal (DOI/RFB), BrasilAPI (CNPJ), validação de CPF em tempo real
+
+### Integrações com Sistemas Públicos
+
+| Integração | Descrição | Status |
+|---|---|---|
+| **DOI / Receita Federal** | Declaração obrigatória de operações imobiliárias ao fisco federal | **Ativa** |
+| **BrasilAPI (CNPJ)** | Consulta de dados completos de pessoa jurídica | **Ativa** |
+| **Validação CPF** | Verificação de situação cadastral (ativo, suspenso, falecido, cancelado) | **Ativa** |
+| **ICP-Brasil** | Assinatura digital com validade jurídica via Lacuna/RestPKI | **Ativa** |
+| **CNIB** | Central Nacional de Indisponibilidade de Bens — restrições judiciais | **Integrado (local)** |
+| **CEI/MT** | Central Eletrônica de Integração — comunicação entre serventias (MT) | Planejada |
+| **RTDPJ** | Registro de Títulos e Documentos de Pessoa Jurídica | Planejada |
+| **NEXTYR** | Plataforma moderna de integração tribunal-serventia | Planejada |
+| **e-SAJ / CNJ** | Sistema do Poder Judiciário — ordens judiciais, penhoras, comunicações | Planejada |
+| **SINTER** | Sistema Nacional de Gestão de Informações Territoriais | Planejada |
+| **ONR** | Operador Nacional do Registro — pedidos remotos de serviços cartorários | Planejada |
+
+### Stack Técnica
+
+| Camada | Tecnologia |
+|---|---|
+| Backend | Laravel 12 · PHP 8.4+ · PostgreSQL · Redis |
+| Frontend | Vue 3.4 · Quasar 2.18 · Pinia 3 · Axios |
+| Autenticação | Laravel Sanctum (cookies HttpOnly, sessões stateful) |
+| PDF | mPDF 8 + wkhtmltopdf (Snappy) |
+| Filas / Cache | Redis |
+| Assinatura Digital | Lacuna/RestPKI (ICP-Brasil) |
+
+### Contribuindo
+
+Contribuições são bem-vindas! Veja a seção [Contributing](#contributing) acima.
+
+Se você conhece a legislação de emolumentos do seu estado, sua ajuda com tabelas de custas é especialmente valiosa.
+
+### Licença
+
+Software livre distribuído sob a licença [MIT](LICENSE).
